@@ -1,3 +1,7 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</html>
 <div class="space-y-8">
     <div class="border-b border-slate-200 pb-4">
         <h1 class="text-2xl font-bold text-slate-900">Administration MedFlow</h1>
