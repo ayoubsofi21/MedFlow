@@ -1,4 +1,5 @@
 # MedFlow
+
 # 🏥 MedFlow – Application de Gestion de Clinique Médicale
 
 ## 📌 Description du Projet
@@ -7,10 +8,10 @@
 
 L’objectif principal est :
 
-* Optimiser la prise de rendez-vous
-* Fluidifier la gestion des plannings des médecins
-* Offrir un suivi clair du cycle de vie des consultations
-* Sécuriser l’accès via un système **RBAC (Role-Based Access Control)**
+- Optimiser la prise de rendez-vous
+- Fluidifier la gestion des plannings des médecins
+- Offrir un suivi clair du cycle de vie des consultations
+- Sécuriser l’accès via un système **RBAC (Role-Based Access Control)**
 
 Chaque utilisateur possède un rôle unique qui détermine ses permissions dans l’application.
 
@@ -24,29 +25,29 @@ Chaque utilisateur possède un rôle unique qui détermine ses permissions dans 
 
 Le patient peut :
 
-* Rechercher un médecin par nom
-* Filtrer par spécialité
-* Consulter les créneaux disponibles
+- Rechercher un médecin par nom
+- Filtrer par spécialité
+- Consulter les créneaux disponibles
 
 ### 📅 Réservation de Rendez-vous
 
 Le patient connecté peut :
 
-* Réserver un créneau libre
-* Planifier une consultation
+- Réserver un créneau libre
+- Planifier une consultation
 
 **Règles :**
 
-* Statut initial : `EN_ATTENTE`
-* Le créneau devient indisponible après réservation
+- Statut initial : `EN_ATTENTE`
+- Le créneau devient indisponible après réservation
 
 ### 📋 Tableau de Bord Patient
 
 Le patient peut :
 
-* Consulter ses rendez-vous passés
-* Voir ses rendez-vous futurs
-* Télécharger ses ordonnances
+- Consulter ses rendez-vous passés
+- Voir ses rendez-vous futurs
+- Télécharger ses ordonnances
 
 ---
 
@@ -56,31 +57,31 @@ Le patient peut :
 
 Le médecin peut :
 
-* Visualiser son agenda
-* Consulter les rendez-vous de la semaine
-* Distinguer les statuts via des couleurs
+- Visualiser son agenda
+- Consulter les rendez-vous de la semaine
+- Distinguer les statuts via des couleurs
 
 ### ✅ Validation / ❌ Annulation
 
 Le médecin peut :
 
-* Valider un rendez-vous
+- Valider un rendez-vous
   → `CONFIRME`
 
-* Annuler un rendez-vous
+- Annuler un rendez-vous
   → `ANNULE`
 
 Lors d’une annulation :
 
-* Le créneau est immédiatement libéré
+- Le créneau est immédiatement libéré
 
 ### 🩺 Consultation & Ordonnance
 
 Pendant une consultation :
 
-* Passage du rendez-vous à `TERMINE`
-* Rédaction d’une ordonnance textuelle
-* Archivage sécurisé du dossier patient
+- Passage du rendez-vous à `TERMINE`
+- Rédaction d’une ordonnance textuelle
+- Archivage sécurisé du dossier patient
 
 ---
 
@@ -90,9 +91,9 @@ Pendant une consultation :
 
 L’administrateur peut :
 
-* Créer un médecin
-* Modifier un compte
-* Désactiver un compte
+- Créer un médecin
+- Modifier un compte
+- Désactiver un compte
 
 Chaque médecin doit être associé à une spécialité.
 
@@ -100,17 +101,17 @@ Chaque médecin doit être associé à une spécialité.
 
 L’administrateur peut :
 
-* Ajouter
-* Modifier
-* Supprimer les spécialités médicales
+- Ajouter
+- Modifier
+- Supprimer les spécialités médicales
 
 ### 📊 Dashboard & Statistiques
 
 L’administrateur peut consulter :
 
-* Taux d’annulation
-* Nombre de rendez-vous terminés
-* Activité globale de la clinique
+- Taux d’annulation
+- Nombre de rendez-vous terminés
+- Activité globale de la clinique
 
 ---
 
@@ -122,15 +123,15 @@ L’application repose sur un système :
 
 ### Rôles disponibles
 
-* ADMIN
-* DOCTOR
-* PATIENT
+- ADMIN
+- DOCTOR
+- PATIENT
 
 L’accès aux routes est protégé via :
 
-* Middleware
-* Vérification des permissions
-* Contrôle des rôles
+- Middleware
+- Vérification des permissions
+- Contrôle des rôles
 
 ---
 
@@ -200,7 +201,7 @@ medflow/
 Ajouter ici le diagramme de cas d’utilisation.
 
 ```md
-![UseCase](docs/usecase.png)
+![UseCase](docs/useCase.png)
 ```
 
 ---
@@ -229,23 +230,23 @@ Ajouter ici l’ERD.
 
 ### Backend
 
-* PHP 8
-* PDO
-* MySQL
+- PHP 8
+- PDO
+- MySQL
 
 ### Frontend
 
-* HTML5
-* CSS3
-* JavaScript
-* Tailwind CSS / Bootstrap
+- HTML5
+- CSS3
+- JavaScript
+- Tailwind CSS / Bootstrap
 
 ### Outils
 
-* Git & GitHub
-* Jira
-* Canva
-* PlantUML
+- Git & GitHub
+- Jira
+- Canva
+- PlantUML
 
 ---
 
@@ -273,11 +274,11 @@ Projet réalisé en équipe.
 
 Répartition des tâches :
 
-* Analyse & UML
-* Backend
-* Frontend
-* Base de données
-* Documentation
+- Analyse & UML
+- Backend
+- Frontend
+- Base de données
+- Documentation
 
 ---
 
