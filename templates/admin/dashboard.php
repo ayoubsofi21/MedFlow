@@ -1,6 +1,5 @@
 <?php
-// Assurez-vous d'activer les sessions en haut de votre fichier réel :
-// session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
