@@ -1,3 +1,7 @@
+<?php
+// Assurez-vous d'activer les sessions en haut de votre fichier réel :
+// session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,12 +11,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex">
+
     <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-10">
         <div class="p-6 border-b border-slate-100 flex items-center gap-3">
             <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold text-xl tracking-wider shadow-md shadow-indigo-200">
@@ -23,6 +28,7 @@
                 <span class="text-xs text-indigo-600 font-medium tracking-wide uppercase">Espace Admin</span>
             </div>
         </div>
+        
         <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
             <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-indigo-50 text-indigo-600 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -44,6 +50,7 @@
                 Spécialités
             </a>
         </nav>
+
         <div class="p-4 border-t border-slate-100">
             <div class="flex items-center gap-3 p-2 bg-slate-50 rounded-xl">
                 <div class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
@@ -56,6 +63,7 @@
             </div>
         </div>
     </aside>
+
     <main class="flex-1 pl-64 min-h-screen flex flex-col">
         
         <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-20">
@@ -63,18 +71,24 @@
                 <h2 class="text-xl font-bold text-slate-800">Tableau de bord général</h2>
             </div>
             <div class="flex items-center gap-4">
+                <span class="text-sm text-slate-500 font-medium">Mardi, 2 Juin 2026</span>
                 <div class="w-px h-5 bg-slate-200"></div>
                 <button class="text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1.5">
                     Déconnexion
                 </button>
             </div>
         </header>
+
         <div class="p-8 space-y-8 flex-1">
+
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Rendez-vous Total</span>
                         <h3 class="text-3xl font-bold text-slate-900 mt-1">1,482</h3>
+                        <p class="text-xs text-emerald-600 font-medium mt-1.5 flex items-center gap-1">
+                            <span>↑ 12%</span> <span class="text-slate-400">ce mois-ci</span>
+                        </p>
                     </div>
                     <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -82,10 +96,14 @@
                         </svg>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Taux d'annulation</span>
                         <h3 class="text-3xl font-bold text-slate-900 mt-1">4.2%</h3>
+                        <p class="text-xs text-emerald-600 font-medium mt-1.5 flex items-center gap-1">
+                            <span>↓ 0.8%</span> <span class="text-slate-400">vs semaine dernière</span>
+                        </p>
                     </div>
                     <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -93,6 +111,7 @@
                         </svg>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Médecins Actifs</span>
@@ -105,6 +124,7 @@
                         </svg>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Consultations Terminées</span>
@@ -118,7 +138,9 @@
                     </div>
                 </div>
             </section>
+
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                
                 <section id="medecins" class="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
                     <div class="p-6 border-b border-slate-100">
                         <h3 class="text-lg font-bold text-slate-900">Équipe des Médecins</h3>
@@ -151,6 +173,13 @@
                                     <input type="password" placeholder="••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                                 </div>
                             </div>
+
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <div class="text-xs text-rose-600 font-semibold bg-rose-50 px-4 py-2.5 rounded-xl border border-rose-100 mt-2">
+                                    <?php echo htmlspecialchars($_SESSION['error']); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="flex justify-end pt-2">
                                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors shadow-sm flex items-center gap-2">
                                     Enregistrer le compte
@@ -221,9 +250,17 @@
                         <p class="text-xs text-slate-500">Filtres de recherche patients.</p>
                     </div>
                     <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-                        <form class="flex gap-2">
-                            <input type="text" placeholder="Nouvelle spécialité..." class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl font-medium text-sm transition-colors">Ajouter</button>
+                        <form class="flex flex-col gap-2">
+                            <div class="flex gap-2">
+                                <input type="text" placeholder="Nouvelle spécialité..." class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl font-medium text-sm transition-colors">Ajouter</button>
+                            </div>
+                            
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <p class="text-xs text-rose-600 font-medium pl-1 mt-1">
+                                    <?php echo htmlspecialchars($_SESSION['error']); ?>
+                                </p>
+                            <?php endif; ?>
                         </form>
                     </div>
                     <div class="p-4 flex-1 overflow-y-auto max-h-[300px]">
@@ -268,6 +305,8 @@
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Spécialité Affectée</label>
                     <select id="editSpecialty" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
                         <option value="1">Cardiologue</option>
+                        <option value="2">Généraliste</option>
+                        <option value="3">Pédiatre</option>
                     </select>
                 </div>
 
@@ -275,13 +314,21 @@
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Adresse Email de Connexion</label>
                     <input type="email" id="editEmail" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
                 </div>
+
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1.5 font-medium flex justify-between">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5 flex justify-between">
                         <span>Nouveau Mot de passe</span>
                         <span class="text-[10px] text-slate-400 font-normal italic">Laisser vide si inchangé</span>
                     </label>
                     <input type="password" placeholder="••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
                 </div>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="text-xs text-rose-600 font-semibold bg-rose-50 px-4 py-2.5 rounded-xl border border-rose-100 mt-2">
+                        <?php echo htmlspecialchars($_SESSION['error']); ?>
+                    </div>
+                <?php endif; ?>
+
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
                     <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm transition-colors">
                         Annuler
@@ -291,35 +338,34 @@
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
+
     <script>
         const modal = document.getElementById('editDoctorModal');
         const card = document.getElementById('modalCard');
 
         function openEditModal(name, specialtyId, email) {
-            // Injecte les données de la ligne dans les inputs du formulaire
             document.getElementById('editName').value = name;
             document.getElementById('editSpecialty').value = specialtyId;
             document.getElementById('editEmail').value = email;
 
-            // Affiche la modale fluidement
             modal.classList.remove('opacity-0', 'pointer-events-none');
             card.classList.remove('scale-95');
             card.classList.add('scale-100');
         }
 
         function closeEditModal() {
-            // Masque la modale
             modal.classList.add('opacity-0', 'pointer-events-none');
             card.classList.remove('scale-100');
             card.classList.add('scale-95');
         }
 
-        // Ferme la modale si l'utilisateur clique en dehors du formulaire
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeEditModal();
         });
     </script>
+
 </body>
 </html>
