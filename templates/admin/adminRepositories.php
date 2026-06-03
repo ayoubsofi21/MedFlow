@@ -52,7 +52,7 @@ function countFinishedCons(){
 }
 
 
-function getAllMedecins(PDO $conn) {
+function getAllMedecins() {
     try {
         $conn = DB::connect();
         $sql = "SELECT u.id, u.nom, u.prenom, u.email,m.numeroRPPS, m.actif, s.libelle AS specialite
@@ -64,5 +64,44 @@ function getAllMedecins(PDO $conn) {
         return $res;
     }catch(PDOException $e){
         echo "error : " . $e->getMessage();
+    }
+}
+
+
+function addDoctor( string $nom, 
+                    string $prenom, 
+                    string $email, 
+                    string $password, 
+                    string $numeroRPPS, 
+                    int $specialite_id)
+{
+    $MEDECIN_ROLE_ID = 2;
+    $conn = DB::connect();
+    $sql1 = "INSERT INTO User (nom, prenom, email, passwordHash, role_id)
+            VALUES (:nom, :prenom, :email, :passwordHash, :role_id)";
+
+    $sql2 = "INSERT INTO Medecin (user_id, numeroRPPS, specialite_id)
+            VALUES (:user_id, :numeroRPPS, :specialite_id)";
+    try {
+        
+        $stmt = $conn->prepare($sql1);
+        $stmt->execute([
+            ':nom'          => $nom,
+            ':prenom'       => $prenom,
+            ':email'        => $email,
+            ':passwordHash' => password_hash($password, PASSWORD_BCRYPT),
+            ':role_id'      => $MEDECIN_ROLE_ID,
+        ]);
+
+        $stmt = $conn->prepare($sql2);
+        $stmt->execute([
+            ':user_id'       => $userId,
+            ':numeroRPPS'    => $numeroRPPS,
+            ':specialite_id' => $specialite_id,
+        ]);
+
+        return true;
+    } catch (Exception $e) {
+        return false;
     }
 }
