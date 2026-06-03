@@ -1,6 +1,54 @@
 <?php
 //  require '../layout/header.php';
  ?>
+ <?php
+require '../../config/database.php';;
+session_start();
+
+$message = '';
+
+if (isset($_POST['register'])) {
+
+    $nom = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $confirm = $_POST['confirm_password'] ?? '';
+
+    if (!empty($nom) && !empty($email) && !empty($password)) {
+
+        if ($password !== $confirm) {
+            $message = "Passwords do not match";
+        } else {
+
+            $check = $conn->prepare("SELECT id FROM User WHERE email = ?");
+            $check->execute([$email]);
+
+            if ($check->rowCount() > 0) {
+                $message = "Email already exists";
+            } else {
+
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+
+                // default role = patient (3)
+                $sql = $conn->prepare("
+                    INSERT INTO User (email, passwordHash, nom, prenom, role_id)
+                    VALUES (?, ?, ?, '', 3)
+                ");
+
+                if ($sql->execute([$email, $hash, $nom])) {
+                    header("Location: login.php");
+                    exit();
+                } else {
+                    $message = "Registration failed";
+                }
+            }
+        }
+
+    } else {
+        $message = "Please fill all fields";
+    }
+}
+?>
 <head>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -12,49 +60,34 @@
         <h2 class="text-3xl font-black text-center">
             Create Account
         </h2>
-        <form class="space-y-4 mt-8">
+        <form method="POST" class="space-y-4 mt-8">
 
-            <input
-                type="text"
-                placeholder="Full Name"
-                class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <?php if (!empty($message)) : ?>
+                <p class="text-red-500 text-center"><?= $message ?></p>
+            <?php endif; ?>
 
-            <input
-                type="email"
-                placeholder="Email Address"
-                class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="text" name="name" placeholder="Full Name"
+                class="w-full border p-3 rounded-xl">
 
-            <input
-                type="password"
-                placeholder="Password"
-                class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="email" name="email" placeholder="Email Address"
+                class="w-full border p-3 rounded-xl">
 
-            <input
-                type="password"
-                placeholder="Confirm Password"
-                class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="password" name="password" placeholder="Password"
+                class="w-full border p-3 rounded-xl">
 
-            <button
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+            <input type="password" name="confirm_password" placeholder="Confirm Password"
+                class="w-full border p-3 rounded-xl">
+
+            <button type="submit" name="register"
+                class="w-full bg-blue-600 text-white py-3 rounded-xl">
                 Create Account
             </button>
 
-            <div class="relative my-6">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-slate-200"></div>
-                </div>
-
-                <div class="relative flex justify-center text-sm">
-                    <span class="bg-white px-3 text-slate-400">
-                        Already registered?
-                    </span>
-                </div>
+            <div class="text-center mt-3">
+                <a href="login.php" class="text-blue-600 font-semibold">
+                    Already have an account? Sign In
+                </a>
             </div>
-
-            <a href="login.php"
-                class="w-full flex justify-center items-center border border-slate-200 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition">
-                Sign In
-            </a>
 
         </form>
 
