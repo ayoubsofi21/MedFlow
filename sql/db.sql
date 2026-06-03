@@ -121,6 +121,10 @@ VALUES
 ('Pediatrie'),
 ('Ophtalmologie'),
 ('Gynecologie');
+INSERT INTO Role (name) VALUES ('ADMIN');
+INSERT INTO Role (name) VALUES ('DOCTOR');
+INSERT INTO Role (name) VALUES ('PATIENT');
+INSERT INTO Role (name) VALUES ('SECRETARY');
 INSERT INTO User(email,passwordHash,nom,prenom,role_id)
 VALUES
 ('admin@gmail.com','123456','Admin','System',1),
