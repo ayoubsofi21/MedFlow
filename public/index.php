@@ -1,56 +1,35 @@
 <?php
+// public/index.php
 
-$page = $_GET['page'] ?? 'admin-dashboard';
+declare(strict_types=1);
 
-require '../templates/layout/header.php';
-?>
+require_once __DIR__ . '/../vendor/autoload.php'; // Si Composer est utilisé, sinon charger manuellement
 
-<div class="flex">
+// Chargement des variables d'environnement (.env fictif ou package Dotenv)
+$_ENV['DB_HOST'] = '127.0.0.1';
+$_ENV['DB_NAME'] = 'medflow';
+$_ENV['DB_USER'] = 'root';
+$_ENV['DB_PASSWORD'] = '';
 
-    <?php
-    //  require '../templates/layout/sidebar.php';
-      ?>
+// Logique simple de routage (Front Controller)
+$route = $_GET['route'] ?? 'patient-dashboard';
 
-    <main class="flex-1 p-8">
+session_start();
 
-        <?php
+switch ($route) {
+    case 'patient-dashboard':
+        $_SESSION['user_role'] = 'ROLE_PATIENT';
+        $controller = new \App\Controller\PatientController();
+        $controller->index();
+        break;
 
-        switch ($page) {
+    case 'doctor-agenda':
+        $_SESSION['user_role'] = 'ROLE_DOCTOR';
+        // Appeler le DoctorController...
+        break;
 
-            case 'admin-dashboard':
-                require '../templates/admin/dashboard.php';
-                break;
-
-            case 'doctors':
-                require '../templates/admin/doctors.php';
-                break;
-
-            case 'specialties':
-                require '../templates/admin/specialties.php';
-                break;
-
-            case 'patient-dashboard':
-                require '../templates/patient/dashboard.php';
-                break;
-
-            case 'search':
-                require '../templates/patient/search.php';
-                break;
-
-            case 'agenda':
-                require '../templates/doctor/agenda.php';
-                break;
-
-            default:
-                echo "<h1>404 Page Not Found</h1>";
-        }
-
-        ?>
-
-    </main>
-
-</div>
-
-<?php
-require '../templates/layout/footer.php';
-?>
+    default:
+        http_response_code(404);
+        echo "Page non trouvée";
+        break;
+}
