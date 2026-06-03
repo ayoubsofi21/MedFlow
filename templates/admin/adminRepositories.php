@@ -68,7 +68,7 @@ function getAllMedecins() {
 }
 
 
-function addDoctor( string $nom, 
+function addMed( string $nom, 
                     string $prenom, 
                     string $email, 
                     string $password, 
@@ -101,6 +101,20 @@ function addDoctor( string $nom,
         ]);
 
         return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+function addSpecialit(string $libelle) : bool {
+    $conn = DB::connect();
+    $sql = "INSERT INTO Specialite (libelle)
+            VALUES (:libelle)";
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':libelle' => $libelle]);
+        return true;
+
     } catch (Exception $e) {
         return false;
     }
