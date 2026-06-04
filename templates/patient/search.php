@@ -12,114 +12,60 @@ $doctors = $controller->searchDoctors();
 
 <head>
     <meta charset="UTF-8">
-    <title>MedFlow - Search</title>
-
-    <!-- Tailwind CDN -->
+    <title>MedFlow</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="bg-slate-100">
 
 <div class="max-w-6xl mx-auto p-6">
 
-    <!-- 🔵 SEARCH FORM -->
-    <div class="bg-white p-6 rounded-2xl shadow mb-8">
+    <!-- SEARCH -->
+    <form method="GET" class="mb-6 flex gap-3">
 
-        <h2 class="text-xl font-bold mb-4">
-            Trouver un médecin
-        </h2>
+        <input type="text" name="doctor_name"
+               placeholder="Nom du médecin"
+               class="border p-2 rounded w-full">
 
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <select name="speciality" class="border p-2 rounded">
+            <option value="">All</option>
+            <option value="Cardiologie">Cardiologie</option>
+            <option value="Dermatologie">Dermatologie</option>
+            <option value="Pediatrie">Pediatrie</option>
+        </select>
 
-            <!-- search name -->
-            <div class="relative">
-                <i class="fa fa-user-doctor absolute left-3 top-3 text-gray-400"></i>
-                <input type="text"
-                       name="doctor_name"
-                       placeholder="Nom du médecin"
-                       class="w-full pl-10 py-2 border rounded-xl bg-slate-50">
-            </div>
+        <button class="bg-blue-600 text-white px-4 rounded">
+            Search
+        </button>
 
-            <!-- speciality -->
-            <div class="relative">
-                <i class="fa fa-stethoscope absolute left-3 top-3 text-gray-400"></i>
-                <select name="speciality"
-                        class="w-full pl-10 py-2 border rounded-xl bg-slate-50">
-                    <option value="">Toutes les spécialités</option>
-                    <option value="cardiologue">Cardiologue</option>
-                    <option value="generaliste">Généraliste</option>
-                </select>
-            </div>
+    </form>
 
-            <!-- button -->
-            <button class="bg-blue-600 text-white rounded-xl px-4 py-2 hover:bg-blue-700">
-                <i class="fa fa-search mr-2"></i> Rechercher
-            </button>
+    <!-- RESULTS -->
+    <div class="space-y-4">
 
-        </form>
-    </div>
+        <?php if (!empty($doctors)): ?>
 
-    <!-- 🟢 DOCTORS LIST -->
-    <div class="space-y-6">
+            <?php foreach ($doctors as $doctor): ?>
 
-        <?php foreach ($doctors as $doctor): ?>
+                <div class="bg-white p-4 rounded shadow">
 
-            <div class="bg-white rounded-2xl shadow p-6">
+                    <h3>
+                        <?= $doctor['prenom'] ?> <?= $doctor['nom'] ?>
+                    </h3>
 
-                <!-- doctor info -->
-                <div class="flex items-center gap-4 mb-4">
-
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <i class="fa fa-user-md text-blue-600"></i>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-lg">
-                            <?= $doctor['name'] ?>
-                        </h3>
-
-                        <p class="text-sm text-blue-600">
-                            <?= $doctor['speciality'] ?>
-                        </p>
-                    </div>
+                    <p class="text-blue-600">
+                        <?= $doctor['speciality'] ?>
+                    </p>
 
                 </div>
 
-                <!-- slots (static for now) -->
-                <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+            <?php endforeach; ?>
 
-                    <button class="bg-blue-50 text-blue-600 py-2 rounded-lg text-sm hover:bg-blue-600 hover:text-white">
-                        09:00
-                    </button>
+        <?php else: ?>
 
-                    <button class="bg-blue-50 text-blue-600 py-2 rounded-lg text-sm hover:bg-blue-600 hover:text-white">
-                        10:30
-                    </button>
+            <p>Aucun médecin trouvé</p>
 
-                    <button class="bg-slate-200 text-slate-400 py-2 rounded-lg text-sm line-through cursor-not-allowed">
-                        14:00
-                    </button>
-
-                </div>
-
-                <!-- book button -->
-                <form method="POST" action="/appointment/book" class="mt-4">
-
-                    <input type="hidden" name="doctor_id" value="<?= $doctor['id'] ?>">
-                    <input type="hidden" name="date" value="2026-06-01 09:00:00">
-
-                    <button class="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700">
-                        Réserver
-                    </button>
-
-                </form>
-
-            </div>
-
-        <?php endforeach; ?>
+        <?php endif; ?>
 
     </div>
 

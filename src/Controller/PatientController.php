@@ -11,8 +11,11 @@ class PatientController
         $this->doctorRepo = new DoctorRepository();
     }
 
-    public function getDoctors()
+    public function searchDoctors()
     {
-        return $this->doctorRepo->getAllDoctors();
+        $name = $_GET['doctor_name'] ?? '';
+        $speciality = $_GET['speciality'] ?? '';
+
+        return $this->doctorRepo->searchDoctors($name, $speciality);
     }
 }
