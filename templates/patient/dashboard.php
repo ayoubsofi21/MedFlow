@@ -36,8 +36,14 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        Search
+                    </button>
+
+                    <a href="/MedFlow/public/auth/logout.php" class="btn btn-danger flex-fill">
+                        Logout
+                    </a>
                 </div>
             </div>
         </form>

@@ -1,7 +1,8 @@
+
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once __DIR__ . '/../src/Middleware/AuthMiddleware.php';
+
+AuthMiddleware::checkLogin(); // user must be logged in
 require_once __DIR__ . '/../src/Controller/PatientController.php';
 
 $controller = new PatientController();
@@ -25,7 +26,13 @@ switch ($action) {
     case 'ordonnance':
         $controller->ordonnance();
         break;
-
+    case 'logout':
+        session_start();
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+        exit();
+        break;
     default:
         $controller->dashboard(1);
         break;
