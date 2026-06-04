@@ -8,7 +8,8 @@ class DoctorRepository
 
     public function __construct()
     {
-        $this->db = Database::connect();
+        global $conn;
+        $this->db = $conn;
     }
 
     public function searchDoctors($name = '', $speciality = '')

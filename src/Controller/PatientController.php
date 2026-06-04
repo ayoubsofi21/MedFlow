@@ -45,7 +45,8 @@ class PatientController
             exit;
         }
 
-        $pdo = Database::connect();
+        global $conn;
+        $pdo = $conn;
         $stmt = $pdo->prepare("SELECT id, dateHeureDebut, dateHeureFin FROM Creneau WHERE medecin_id = ? AND disponible = 1");
         $stmt->execute([$medecinId]);
         $creneaux = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
@@ -71,7 +72,8 @@ class PatientController
         $ord = null;
 
         if ($rdvId) {
-            $pdo = Database::connect();
+            global $conn;
+            $pdo = $conn;
             $stmt = $pdo->prepare("SELECT contenuTexte FROM Ordonnance WHERE rendezvous_id = ?");
             $stmt->execute([$rdvId]);
             $ord = $stmt->fetch(PDO::FETCH_ASSOC);

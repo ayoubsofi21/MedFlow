@@ -39,7 +39,7 @@ class AuthController {
             header("Location: /MedFlow/templates/doctor/dashboard.php");
 
         } else {
-            header("Location: /MedFlow/templates/patient/dashboard.php");
+            header("Location: /MedFlow/public/index.php");
         }
 
         exit();
