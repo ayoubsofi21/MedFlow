@@ -1,5 +1,5 @@
 <?php
-//  require '../layout/header.php';
+ require '../layout/header.php';
  ?>
  <?php
 require '../../config/database.php';;

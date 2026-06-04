@@ -1,8 +1,9 @@
 <?php
-//  require '../layout/header.php'; 
+require __DIR__ . '/../layout/header.php';
+require __DIR__ . '/../../config/database.php';
 ?>
 <?php
-require '../../config/database.php';
+
 session_start();
 
 $message = '';
