@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../src/Controller/PatientController.php';
 
-$controller = new PatientController();
+$controller = new PatientController(); 
 $doctors = $controller->searchDoctors(); 
 
 ?> 
