@@ -3,6 +3,8 @@
 CREATE DATABASE gestion_rendezvous_medical;
 USE gestion_rendezvous_medical;
 
+DROP DATABASE  gestion_rendezvous_medical;
+
 -- =========================
 -- ROLE
 -- =========================

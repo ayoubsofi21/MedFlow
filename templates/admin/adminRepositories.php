@@ -94,13 +94,14 @@ function addMed( string $nom,
             ':role_id'      => $MEDECIN_ROLE_ID,
         ]);
 
+        $userId = $conn->lastInsertId();
+
         $stmt = $conn->prepare($sql2);
         $stmt->execute([
             ':user_id'       => $userId,
             ':numeroRPPS'    => $numeroRPPS,
             ':specialite_id' => $specialite_id,
         ]);
-
         return true;
     } catch (Exception $e) {
         return false;
@@ -149,4 +150,20 @@ function getAllSpecialities(){
         echo "error : " . $e->getMessage();
     }
 
+}
+
+function updateMedecinStatus(int $id_medecin, int $nouveau_statut) : bool {
+    $conn = DB::connect();
+    $sql = "UPDATE Medecin SET actif = :statut WHERE user_id = :id";
+    
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            ':statut' => $nouveau_statut,
+            ':id' => $id_medecin
+        ]);
+        return true; // Tout s'est bien passé
+    } catch (Exception $e) {
+        return false; // Il y a eu une erreur
+    }
 }

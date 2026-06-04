@@ -150,47 +150,62 @@ require_once __DIR__ . "/adminRepositories.php";
 
                     <div class="p-6 bg-slate-50/70 border-b border-slate-100">
                         <h4 class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-4">Nouveau Profil Médecin</h4>
-                        <form class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nom Complet</label>
-                                    <input type="text" placeholder="Ex: Dr. Yassine Aberkane" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Spécialité Médicale</label>
-                                    <select class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors required">
-                                        <option value="">Sélectionner une spécialité...</option>
+                        <form action="scripts/add_doctor_process.php" method="POST" class="space-y-4 max-w-md bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                         
+                            <h3 class="text-base font-bold text-slate-900 mb-2">Ajouter un nouveau médecin</h3>
 
-                                        <?php if (!empty($specialities)): ?>
-                                            <?php foreach ($specialities as $speciality): ?>
-                                                <option value="<?php echo htmlspecialchars($speciality->id); ?>">
-                                                    <?php echo htmlspecialchars($speciality->libelle); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Adresse Email</label>
-                                    <input type="email" placeholder="y.aberkane@clinic.ma" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Mot de passe temporaire</label>
-                                    <input type="password" placeholder="••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
-                                </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Nom</label>
+                                <input type="text" name="nom" required placeholder="Ex: Tazi" 
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                             </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Prénom</label>
+                                <input type="text" name="prenom" required placeholder="Ex: Karim" 
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Adresse Email</label>
+                                <input type="email" name="email" required placeholder="Ex: k.tazi@clinic.ma" 
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Numéro RPPS</label>
+                                <input type="text" name="numeroRPPS" required placeholder="Ex: 10101234567" 
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Spécialité</label>
+                                <select name="specialite_id" required class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                                    <option value="">Sélectionner une spécialité...</option>
+                                    <?php 
+                                    $specialities = getAllSpecialities();
+                                    if (!empty($specialities)):
+                                        foreach ($specialities as $speciality): 
+                                    ?>
+                                            <option value="<?php echo $speciality->id; ?>">
+                                                <?php echo htmlspecialchars($speciality->libelle); ?>
+                                            </option>
+                                    <?php 
+                                        endforeach;
+                                    endif; 
+                                    ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition-colors mt-2 shadow-sm">
+                                Enregistrer le médecin
+                            </button>
 
                             <?php if (isset($_SESSION['error'])): ?>
-                                <div class="text-xs text-rose-600 font-semibold bg-rose-50 px-4 py-2.5 rounded-xl border border-rose-100 mt-2">
+                                <p class="text-xs text-rose-600 font-medium mt-2 pl-1">
                                     <?php echo htmlspecialchars($_SESSION['error']); ?>
-                                </div>
+                                </p>
                             <?php endif; ?>
-
-                            <div class="flex justify-end pt-2">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors shadow-sm flex items-center gap-2">
-                                    Enregistrer le compte
-                                </button>
-                            </div>
                         </form>
                     </div>
 
@@ -206,7 +221,7 @@ require_once __DIR__ . "/adminRepositories.php";
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
                                     <?php 
-                                    $medecins = [] ; // doctors array
+                                    $medecins = getAllMedecins() ; // doctors array
 
                                     if (!empty($medecins)): 
                                         foreach ($medecins as $medecin): 
@@ -242,9 +257,20 @@ require_once __DIR__ . "/adminRepositories.php";
                                                         Modifier
                                                     </button>
                                                     
-                                                    <button class="<?php echo $medecin->actif ? 'text-rose-600 hover:text-rose-900' : 'text-emerald-600 hover:text-emerald-900'; ?> font-medium text-xs">
-                                                        <?php echo $medecin->actif ? 'Désactiver' : 'Activer'; ?>
-                                                    </button>
+                                                    <?php 
+                                                    if ($medecin->actif == 1) {
+                                                        $texte_lien = "Désactiver";
+                                                        $classe_couleur = "text-rose-600 hover:text-rose-900";
+                                                    } else {
+                                                        $texte_lien = "Activer";
+                                                        $classe_couleur = "text-emerald-600 hover:text-emerald-900";
+                                                    }
+                                                    ?>
+
+                                                    <a href="scripts/toggle_status.php?id=<?php echo $medecin->user_id; ?>" 
+                                                       class="<?php echo $classe_couleur; ?> font-medium text-xs inline-block">
+                                                        <?php echo $texte_lien; ?>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         <?php 
