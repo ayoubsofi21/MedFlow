@@ -14,7 +14,7 @@ if (isset($_POST['nom'])) {
         header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
-    $password_DEMO = "Bienvenue123";
+    $password_DEMO = "AZERTY123";
     $succes = addMed($nom, $prenom, $email, $password_DEMO, $numeroRPPS, $specialite_id);
     if ($succes === false) {
         $_SESSION['error'] = "Erreur : Un médecin utilise déjà cet email ou ce numéro RPPS.";

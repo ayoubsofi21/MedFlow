@@ -29,7 +29,7 @@ function getTotalCancels() {
 function getTotalDrsActifs() {
     try {
         $conn = DB::connect();
-        $sql = "SELECT COUNT(*) FROM Medecin WHERE actif = 1";
+        $sql = "SELECT COUNT(*) AS total FROM Medecin WHERE actif = 1";
         $stmt = $conn->query($sql);
         $res =  $stmt->fetch();
         return $res;
@@ -41,7 +41,7 @@ function getTotalDrsActifs() {
 function countFinishedCons(){
    try {
         $conn = DB::connect();
-        $sql = "SELECT COUNT(*) FROM RendezVous WHERE statut = :statut";
+        $sql = "SELECT COUNT(*) AS total FROM RendezVous WHERE statut = :statut";
         $stmt = $conn->prepare($sql);
         $stmt->execute([':statut' => 'TERMINE']);
         $res = $stmt->fetch();
@@ -162,8 +162,42 @@ function updateMedecinStatus(int $id_medecin, int $nouveau_statut) : bool {
             ':statut' => $nouveau_statut,
             ':id' => $id_medecin
         ]);
-        return true; // Tout s'est bien passé
+        return true; 
     } catch (Exception $e) {
-        return false; // Il y a eu une erreur
+        return false;
+    }
+}
+
+function updateMed($user_id, $nom, $prenom, $email, $numeroRPPS, $specialite_id) {
+    $conn = DB::connect();
+    $sql1 = "UPDATE User 
+                 SET nom = :nom, prenom = :prenom, email = :email 
+                 WHERE id = :user_id";
+
+    $sql2 = "UPDATE Medecin 
+                    SET numeroRPPS = :numeroRPPS, specialite_id = :specialite_id 
+                    WHERE user_id = :user_id";
+
+    try {
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->execute([
+            ':nom'      => $nom,
+            ':prenom'   => $prenom,
+            ':email'    => $email,
+            ':user_id'  => $user_id
+        ]);
+
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->execute([
+            ':numeroRPPS'    => $numeroRPPS,
+            ':specialite_id' => $specialite_id,
+            ':user_id'       => $user_id
+        ]);
+
+        return true;
+
+    } catch (Exception $e) {
+        echo "error : " . $e->getMessage();
+        return false;
     }
 }

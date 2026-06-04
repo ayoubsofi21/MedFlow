@@ -1,173 +1,252 @@
+<?php
+session_start();
+
+// Données fictives pour la démonstration
+$specialities = [
+    (object)['id' => 1, 'libelle' => 'Cardiologue'],
+    (object)['id' => 2, 'libelle' => 'Généraliste'],
+    (object)['id' => 3, 'libelle' => 'Pédiatre']
+];
+
+$past_appointments = [
+    (object)['id' => 101, 'doctor' => 'Dr. Yassine Aberkane', 'specialite' => 'Cardiologue', 'date' => '15 Mai 2026', 'heure' => '10:00', 'prescription' => true],
+    (object)['id' => 102, 'doctor' => 'Dr. Amina Sbihi', 'specialite' => 'Généraliste', 'date' => '02 Avril 2026', 'heure' => '15:30', 'prescription' => true]
+];
+
+$future_appointments = [
+    (object)['id' => 103, 'doctor' => 'Dr. Yassine Aberkane', 'specialite' => 'Cardiologue', 'date' => '12 Juin 2026', 'heure' => '14:30', 'statut' => 'CONFIRME'],
+    (object)['id' => 104, 'doctor' => 'Dr. Karim Tazi', 'specialite' => 'Pédiatre', 'date' => '20 Juin 2026', 'heure' => '09:00', 'statut' => 'EN_ATTENTE']
+];
+
+$slots = [
+    '09:00', '09:45', '10:30', '11:15', '14:00', '14:45', '15:30', '16:15'
+];
+?>
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-slate-50">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedFlow - Gestion Clinique & Rendez-vous</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>MediControl - Espace Patient</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="flex flex-col min-h-screen text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex">
 
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm shadow-indigo-200">
-                        M
-                    </div>
-                    <span class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">MedFlow</span>
-                </div>
+    <!-- Sidebar unique au patient -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-10">
+        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+            <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold text-xl tracking-wider shadow-md shadow-indigo-200">M+</div>
+            <div>
+                <h1 class="font-bold text-slate-900 leading-tight">MediControl</h1>
+                <span class="text-xs text-indigo-600 font-medium tracking-wide uppercase">Mon Espace Santé</span>
+            </div>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-1.5">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-indigo-50 text-indigo-600 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                </svg>
+                Tableau de bord
+            </a>
+            <a href="#prendre-rdv" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-slate-600 hover:bg-slate-50 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Prendre Rendez-vous
+            </a>
+        </nav>
 
-                <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-                    <a href="#features" class="hover:text-indigo-600 transition-colors">Services</a>
-                    <a href="#stats" class="hover:text-indigo-600 transition-colors">Chiffres</a>
-                    <a href="#about" class="hover:text-indigo-600 transition-colors">À propos</a>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <a href="login.php" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 px-3 py-2 transition-colors">
-                        Connexion
-                    </a>
-                    <a href="register.php" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition-all hover:shadow shadow-indigo-100">
-                        S'inscrire
-                    </a>
+        <div class="p-4 border-t border-slate-100">
+            <div class="flex items-center gap-3 p-2 bg-slate-50 rounded-xl">
+                <div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">PT</div>
+                <div class="flex-1 overflow-hidden">
+                    <h4 class="text-sm font-semibold text-slate-900 truncate">Mehdi Bennani</h4>
+                    <p class="text-xs text-slate-500 truncate">mehdi@email.ma</p>
                 </div>
             </div>
         </div>
-    </nav>
+    </aside>
 
-    <header class="relative overflow-hidden bg-white pt-16 pb-20 lg:pt-24 lg:pb-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+    <main class="flex-1 pl-64 min-h-screen flex flex-col">
+        <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-20">
+            <h2 class="text-xl font-bold text-slate-800">Mon Espace Patient</h2>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-slate-500 font-medium">Jeudi, 4 Juin 2026</span>
+                <button class="text-sm font-medium text-rose-600 hover:text-rose-700">Déconnexion</button>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8 flex-1">
+
+            <!-- Section 1 : Moteur de Recherche de Médecins (US 1.1 & US 1.2) -->
+            <section id="prendre-rdv" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Trouver un médecin</h3>
+                    <p class="text-xs text-slate-500">Recherchez un praticien et réservez instantanément un créneau libre.</p>
+                </div>
+
+                <!-- Formulaire de filtrage (US 1.1) -->
+                <form class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Nom du médecin (ex: Aberkane)..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                        <span class="absolute left-3.5 top-3.5 text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </span>
+                    </div>
+                    <div>
+                        <select class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                            <option value="">Toutes les spécialités...</option>
+                            <?php foreach ($specialities as $spec): ?>
+                                <option value="<?php echo $spec->id; ?>"><?php echo htmlspecialchars($spec->libelle); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <button type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm transition-colors shadow-sm">
+                        Rechercher
+                    </button>
+                </form>
+
+                <!-- Zone d'affichage des résultats et calendrier de créneaux (US 1.1) -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">DA</div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">Dr. Yassine Aberkane</h4>
+                                <span class="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full border border-blue-100">Cardiologue</span>
+                            </div>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">Créneaux pour demain (Vendredi 5 Juin)</span>
+                    </div>
+
+                    <!-- Grille de créneaux (US 1.2) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
+                        <?php foreach($slots as $index => $slot): ?>
+                            <!-- Simulation : Les 2 premiers créneaux sont déjà pris, les autres sont libres -->
+                            <?php if($index < 2): ?>
+                                <button type="button" disabled class="bg-slate-100 text-slate-400 text-xs font-bold py-2.5 rounded-xl cursor-not-allowed border border-slate-200 line-through">
+                                    <?php echo $slot; ?>
+                                </button>
+                            <?php else: ?>
+                                <button type="button" onclick="confirmAppointment('Dr. Yassine Aberkane', '<?php echo $slot; ?>')" 
+                                        class="bg-white border border-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all text-center shadow-sm">
+                                    <?php echo $slot; ?>
+                                </button>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2 : Tableau de bord des rendez-vous (US 1.3) -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 
-                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 mb-4 border border-indigo-100/50">
-                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span> Solution Santé connectée
-                    </span>
-                    <h1 class="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl md:text-6xl leading-tight">
-                        Votre santé, <br>
-                        <span class="text-indigo-600">uniquement sur rendez-vous.</span>
-                    </h1>
-                    <p class="mt-4 text-base text-slate-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl leading-relaxed">
-                        Planifiez vos consultations en quelques clics avec nos spécialistes, accédez à vos ordonnances sécurisées et gérez le suivi de votre santé en toute simplicité.
-                    </p>
-                    
-                    <div class="mt-8 sm:max-w-lg sm:mx-auto lg:mx-0 flex flex-col sm:flex-row gap-4">
-                        <a href="prendre-rdv.php" class="flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-100 transition-all text-center">
-                            Prendre rendez-vous
-                        </a>
-                        <a href="login.php?role=medecin" class="flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold px-6 py-3.5 rounded-xl transition-colors text-center">
-                            Portail Médecins
-                        </a>
+                <!-- Rendez-vous à venir -->
+                <section class="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900">Mes consultations programmées</h3>
+                        <p class="text-xs text-slate-500">Suivi du statut de vos demandes de rendez-vous.</p>
                     </div>
-                </div>
-
-                <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 flex justify-center">
-                    <div class="relative w-full max-w-md bg-gradient-to-tr from-indigo-100 to-emerald-50 rounded-3xl p-8 shadow-2xl border border-white">
-                        <div class="bg-white rounded-2xl p-4 shadow-xl border border-slate-100 mb-4 transform -translate-x-4 rotate-1 max-w-xs">
-                            <div class="flex items-center gap-3">
-                                <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Prochain RDV</span>
-                            </div>
-                            <p class="text-sm font-semibold text-slate-900 mt-1">Demain à 10h30</p>
-                            <p class="text-xs text-slate-400">Dr. Amina Benjelloun (Cardiologue)</p>
-                        </div>
-
-                        <div class="bg-white rounded-2xl p-5 shadow-xl border border-slate-100 transform translate-x-4 -rotate-1">
-                            <h4 class="text-sm font-bold text-slate-900 mb-3">Spécialités disponibles</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center text-xs p-2 bg-slate-50 rounded-lg">
-                                    <span class="font-medium text-slate-700">Cardiologie</span>
-                                    <span class="text-indigo-600 font-semibold">Dispo</span>
+                    <div class="p-6 space-y-4">
+                        <?php foreach($future_appointments as $app): ?>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50/60 rounded-xl border border-slate-100 gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-white p-3 rounded-xl border text-center min-w-[70px]">
+                                        <p class="text-xs font-bold text-indigo-600 uppercase"><?php echo explode(' ', $app->date)[1]; ?></p>
+                                        <p class="text-lg font-extrabold text-slate-900 leading-tight"><?php echo explode(' ', $app->date)[0]; ?></p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-900"><?php echo $app->doctor; ?></h4>
+                                        <p class="text-xs text-slate-500"><?php echo $app->specialite; ?> &bull; <?php echo $app->heure; ?></p>
+                                    </div>
                                 </div>
-                                <div class="flex justify-between items-center text-xs p-2 bg-slate-50 rounded-lg">
-                                    <span class="font-medium text-slate-700">Pédiatrie</span>
-                                    <span class="text-indigo-600 font-semibold">Dispo</span>
+                                <div>
+                                    <?php if($app->statut === 'CONFIRME'): ?>
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Confirmé
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">
+                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> En attente
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                </div>
+                </section>
+
+                <!-- Historique et Ordonnances -->
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900">Historique & Ordonnances</h3>
+                        <p class="text-xs text-slate-500">Consultez vos anciennes visites et vos prescriptions.</p>
+                    </div>
+                    <div class="p-6 space-y-4 flex-1">
+                        <?php foreach($past_appointments as $past): ?>
+                            <div class="p-4 bg-white border border-slate-100 rounded-xl space-y-3 shadow-sm">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-900"><?php echo $past->doctor; ?></h4>
+                                    <p class="text-[11px] text-slate-400"><?php echo $past->date; ?> &bull; <?php echo $past->heure; ?></p>
+                                </div>
+                                <button type="button" class="w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-indigo-600 py-2 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Télécharger l'ordonnance
+                                </button>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
 
             </div>
         </div>
-    </header>
+    </main>
 
-    <section id="stats" class="bg-slate-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div>
-                    <div class="text-3xl font-extrabold text-indigo-400">15+</div>
-                    <div class="text-sm text-slate-400 mt-1">Médecins Spécialistes</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-extrabold text-emerald-400">100%</div>
-                    <div class="text-sm text-slate-400 mt-1">Ordonnances Sécurisées</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-extrabold text-indigo-400">24/7</div>
-                    <div class="text-sm text-slate-400 mt-1">Prise de RDV en ligne</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-extrabold text-emerald-400">0</div>
-                    <div class="text-sm text-slate-400 mt-1">Frais de dossier</div>
-                </div>
+    <!-- Modale de Confirmation de Réservation (US 1.2) -->
+    <div id="bookingModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden p-6 space-y-4">
+            <h3 class="text-base font-bold text-slate-900">Confirmer la demande de rendez-vous ?</h3>
+            <p class="text-sm text-slate-500">
+                Vous êtes sur le point de bloquer le créneau de <span id="modal-time" class="font-bold text-indigo-600"></span> avec <span id="modal-doc" class="font-bold text-slate-800"></span>.
+            </p>
+            <p class="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100">
+                Le rendez-vous sera enregistré avec le statut <strong>En attente</strong> jusqu'à la validation du médecin.
+            </p>
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="closeBookingModal()" class="px-4 py-2 text-sm font-semibold text-slate-500">Annuler</button>
+                <button type="button" onclick="submitBooking()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2 rounded-xl shadow-md shadow-indigo-100">
+                    Confirmer la réservation
+                </button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="features" class="py-20 lg:py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Une gestion simplifiée pour tous</h2>
-                <p class="mt-4 text-lg text-slate-500">Que vous soyez un patient à la recherche d'un créneau ou un praticien gérant vos consultations.</p>
-            </div>
+    <script>
+        const modal = document.getElementById('bookingModal');
+        
+        function confirmAppointment(doctorName, timeSlot) {
+            document.getElementById('modal-doc').innerText = doctorName;
+            document.getElementById('modal-time').innerText = timeSlot;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-5">
-                        📅
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Créneaux en temps réel</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Visualisez instantanément les disponibilités de vos médecins et réservez l'heure exacte qui convient à votre emploi du temps.
-                    </p>
-                </div>
+        function closeBookingModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
 
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold mb-5">
-                        📄
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Ordonnances Numériques</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Retrouvez vos prescriptions textuelles directement sur votre espace personnel sécurisé juste après votre consultation terminée.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-5">
-                        🛡️
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Espace Praticien Dédié</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Les médecins peuvent configurer l'activation de leur profil, suivre leur tableau de bord et modifier le statut des consultations (Confirmé, Terminé).
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="mt-auto bg-white border-t border-slate-200 py-8 text-center text-sm text-slate-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">
-                    M
-                </div>
-                <span class="font-bold text-slate-700">MedFlow</span>
-            </div>
-            <p>&copy; 2026 MedFlow. Tous droits réservés. Projet Application Clinique Médicale.</p>
-        </div>
-    </footer>
-
+        function submitBooking() {
+            // Ici l'envoi du formulaire ou la requête Ajax
+            alert('Réservation enregistrée ! Statut initial : EN_ATTENTE.');
+            closeBookingModal();
+        }
+    </script>
 </body>
 </html>

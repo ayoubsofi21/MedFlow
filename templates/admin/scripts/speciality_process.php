@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . '../adminRepositories.php'; 
+require_once __DIR__ . '/../adminRepositories.php'; 
 
 if (isset($_POST['libelle'])) {
     $nouvelle_specialite = trim($_POST['libelle']);
     if ($nouvelle_specialite === "") {
-        $_SESSION['error'] = "Tu dois écrire le nom d'une spécialité !";
+        $_SESSION['spec_error'] = "Tu dois écrire le nom d'une spécialité !";
         header("Location: " . $_SERVER['HTTP_REFERER']); 
         exit();
     }
@@ -21,7 +21,7 @@ if (isset($_POST['libelle'])) {
     }
 
     if ($existe_deja === true) {
-        $_SESSION['error'] = "Désolé, la spécialité '" . $nouvelle_specialite . "' existe déjà.";
+        $_SESSION['spec_error'] = "Désolé, la spécialité '" . $nouvelle_specialite . "' existe déjà.";
         header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
@@ -29,9 +29,9 @@ if (isset($_POST['libelle'])) {
     $resultat = addSpecialit($nouvelle_specialite);
 
     if ($resultat === true) {
-        unset($_SESSION['error']);
+        unset($_SESSION['spec_error']);
     } else {
-        $_SESSION['error'] = "Erreur technique : impossible d'enregistrer.";
+        $_SESSION['spec_error'] = "Erreur technique : impossible d'enregistrer.";
     }
 
     header("Location: " . $_SERVER['HTTP_REFERER']);

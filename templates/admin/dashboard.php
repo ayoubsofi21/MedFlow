@@ -86,10 +86,7 @@ require_once __DIR__ . "/adminRepositories.php";
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Rendez-vous Total</span>
-                        <h3 class="text-3xl font-bold text-slate-900 mt-1">1,482</h3>
-                        <p class="text-xs text-emerald-600 font-medium mt-1.5 flex items-center gap-1">
-                            <span>↑ 12%</span> <span class="text-slate-400">ce mois-ci</span>
-                        </p>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-1"><?php echo count(getTotalRDVs()); ?></h3>
                     </div>
                     <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -101,10 +98,7 @@ require_once __DIR__ . "/adminRepositories.php";
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Taux d'annulation</span>
-                        <h3 class="text-3xl font-bold text-slate-900 mt-1">4.2%</h3>
-                        <p class="text-xs text-emerald-600 font-medium mt-1.5 flex items-center gap-1">
-                            <span>↓ 0.8%</span> <span class="text-slate-400">vs semaine dernière</span>
-                        </p>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-1"><?php echo ((count(getTotalCancels())/count(getTotalRDVs()))*100)-100; ?>%</h3>
                     </div>
                     <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -116,7 +110,7 @@ require_once __DIR__ . "/adminRepositories.php";
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Médecins Actifs</span>
-                        <h3 class="text-3xl font-bold text-slate-900 mt-1">18</h3>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-1"><?php echo getTotalDrsActifs()['total'] ; ?></h3>
                         <p class="text-xs text-slate-400 font-medium mt-1.5">Sur 3 spécialités</p>
                     </div>
                     <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
@@ -129,7 +123,7 @@ require_once __DIR__ . "/adminRepositories.php";
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Consultations Terminées</span>
-                        <h3 class="text-3xl font-bold text-slate-900 mt-1">1,120</h3>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-1"><?php echo countFinishedCons()['total'] ; ?></h3>
                         <p class="text-xs text-slate-400 font-medium mt-1.5">Dossiers sécurisés archivés</p>
                     </div>
                     <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
@@ -203,7 +197,10 @@ require_once __DIR__ . "/adminRepositories.php";
 
                             <?php if (isset($_SESSION['error'])): ?>
                                 <p class="text-xs text-rose-600 font-medium mt-2 pl-1">
-                                    <?php echo htmlspecialchars($_SESSION['error']); ?>
+                                    <?php 
+                                    echo htmlspecialchars($_SESSION['error']);
+                                    unset($_SESSION['error']);
+                                    ?>
                                 </p>
                             <?php endif; ?>
                         </form>
@@ -221,7 +218,7 @@ require_once __DIR__ . "/adminRepositories.php";
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
                                     <?php 
-                                    $medecins = getAllMedecins() ; // doctors array
+                                    $medecins = getAllMedecins();
 
                                     if (!empty($medecins)): 
                                         foreach ($medecins as $medecin): 
@@ -252,7 +249,14 @@ require_once __DIR__ . "/adminRepositories.php";
                                                 </td>
                                                     
                                                 <td class="py-4 px-6 text-right space-x-3">
-                                                    <button onclick="openEditModal('<?php echo addslashes(htmlspecialchars($doctorName)); ?>', '<?php echo htmlspecialchars($medecin->specialite_id); ?>', '<?php echo htmlspecialchars($medecin->email); ?>')" 
+                                                    <button onclick="openEditModal(
+                                                                '<?php echo $medecin->user_id; ?>',
+                                                                '<?php echo $medecin->nom; ?>',
+                                                                '<?php echo $medecin->prenom; ?>',
+                                                                '<?php echo $medecin->email; ?>',
+                                                                '<?php echo $medecin->numeroRPPS; ?>',
+                                                                '<?php echo $medecin->specialite_id; ?>'
+                                                            )" 
                                                             class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs">
                                                         Modifier
                                                     </button>
@@ -307,11 +311,11 @@ require_once __DIR__ . "/adminRepositories.php";
                                 </button>
                             </div>
 
-                            <?php if (isset($_SESSION['error'])): ?>
+                            <?php if (isset($_SESSION['spec_error'])): ?>
                                 <p class="text-xs text-rose-600 font-medium pl-1 mt-1">
                                     <?php 
-                                    echo htmlspecialchars($_SESSION['error']); 
-                                    unset($_SESSION['error']);
+                                    echo htmlspecialchars($_SESSION['spec_error']); 
+                                    unset($_SESSION['spec_error']);
                                     ?>
                                 </p>
                             <?php endif; ?>
@@ -319,12 +323,20 @@ require_once __DIR__ . "/adminRepositories.php";
                     </div>
                     <div class="p-4 flex-1 overflow-y-auto max-h-[300px]">
                         <ul class="space-y-2">
-                            <li class="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl">
-                                <span class="text-sm font-medium text-slate-800">Cardiologue</span>
-                            </li>
-                            <li class="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl">
-                                <span class="text-sm font-medium text-slate-800">Généraliste</span>
-                            </li>
+                            <?php
+                            $specialites = getAllSpecialities();
+                            if (!empty($specialites)):
+                                foreach ($specialites as $spec):
+                            ?>
+                                <li class="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl">
+                                    <span class="text-sm font-medium text-slate-800"><?php echo htmlspecialchars($spec->libelle); ?></span>
+                                </li>
+                            <?php
+                                endforeach;
+                            else:
+                            ?>
+                                <li class="text-sm text-slate-400 italic text-center py-4">Aucune spécialité trouvée.</li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </section>
@@ -332,7 +344,6 @@ require_once __DIR__ . "/adminRepositories.php";
             </div>
         </div>
     </main>
-
     <div id="editDoctorModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-200">
         
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-slate-200 overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
@@ -349,40 +360,64 @@ require_once __DIR__ . "/adminRepositories.php";
                 </button>
             </div>
 
-            <form class="p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nom Complet</label>
-                    <input type="text" id="editName" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+            <form action="scripts/modify_doctor_process.php" method="POST" class="p-6 space-y-4">
+                <input type="hidden" name="user_id" id="editUserId">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nom</label>
+                        <input type="text" name="nom" id="editNom" required
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Prénom</label>
+                        <input type="text" name="prenom" id="editPrenom" required
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+                    </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Spécialité Affectée</label>
-                    <select id="editSpecialty" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
-                        <option value="1">Cardiologue</option>
-                        <option value="2">Généraliste</option>
-                        <option value="3">Pédiatre</option>
+                    <select name="specialite_id" id="editSpecialty" required class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+                        <option value="">Sélectionner une spécialité...</option>
+                        <?php 
+                        $specialites = getAllSpecialities();
+                        if (!empty($specialites)):
+                            foreach ($specialites as $spec): 
+                        ?>
+                            <option value="<?php echo $spec->id; ?>">
+                                <?php echo htmlspecialchars($spec->libelle); ?>
+                            </option>
+                        <?php 
+                            endforeach;
+                        endif; 
+                        ?>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Adresse Email de Connexion</label>
-                    <input type="email" id="editEmail" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+                    <input type="email" name="email" id="editEmail" required
+                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5 flex justify-between">
-                        <span>Nouveau Mot de passe</span>
-                        <span class="text-[10px] text-slate-400 font-normal italic">Laisser vide si inchangé</span>
+                        <span>Numéro RPPS</span>
+                        <span class="text-[10px] text-slate-400 font-normal italic">Modifier uniquement si nécessaire</span>
                     </label>
-                    <input type="password" placeholder="••••••••" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+                    <input type="text" name="numeroRPPS" id="editRPPS" required placeholder="Ex: 10101234567"
+                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
                 </div>
 
-                <?php if (isset($_SESSION['error'])): ?>
+                <?php if (isset($_SESSION['edit_error'])): ?>
                     <div class="text-xs text-rose-600 font-semibold bg-rose-50 px-4 py-2.5 rounded-xl border border-rose-100 mt-2">
-                        <?php echo htmlspecialchars($_SESSION['error']); ?>
+                        <?php 
+                        echo htmlspecialchars($_SESSION['edit_error']);
+                        unset($_SESSION['edit_error']);
+                        ?>
                     </div>
                 <?php endif; ?>
-
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
                     <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm transition-colors">
                         Annuler
@@ -392,34 +427,30 @@ require_once __DIR__ . "/adminRepositories.php";
                     </button>
                 </div>
             </form>
-
         </div>
     </div>
-
     <script>
         const modal = document.getElementById('editDoctorModal');
-        const card = document.getElementById('modalCard');
-
-        function openEditModal(name, specialtyId, email) {
-            document.getElementById('editName').value = name;
-            document.getElementById('editSpecialty').value = specialtyId;
-            document.getElementById('editEmail').value = email;
-
+        const card  = document.getElementById('modalCard');
+        function openEditModal(userId, nom, prenom, email, numeroRPPS, specialiteId) {
+            document.getElementById('editUserId').value   = userId;
+            document.getElementById('editNom').value      = nom;
+            document.getElementById('editPrenom').value   = prenom;
+            document.getElementById('editEmail').value    = email;
+            document.getElementById('editRPPS').value     = numeroRPPS;
+            document.getElementById('editSpecialty').value = specialiteId;
             modal.classList.remove('opacity-0', 'pointer-events-none');
             card.classList.remove('scale-95');
             card.classList.add('scale-100');
         }
-
         function closeEditModal() {
             modal.classList.add('opacity-0', 'pointer-events-none');
             card.classList.remove('scale-100');
             card.classList.add('scale-95');
         }
-
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeEditModal();
         });
     </script>
-
 </body>
 </html>
