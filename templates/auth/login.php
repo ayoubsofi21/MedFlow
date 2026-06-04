@@ -1,11 +1,10 @@
 <?php
-//  require '../layout/header.php'; 
+require __DIR__ . '/../layout/header.php';
 ?>
 <?php
-require '../../config/database.php';
 session_start();
 
-$message = '';
+require __DIR__ . '/../../config/database.php';
 
 if (isset($_POST['Sign_in'])) {
 
@@ -14,7 +13,20 @@ if (isset($_POST['Sign_in'])) {
 
     if (!empty($email) && !empty($password)) {
 
-        $sql = $conn->prepare("SELECT * FROM User WHERE email = ?");
+        $sql = $conn->prepare("
+            SELECT 
+                u.id,
+                u.email,
+                u.nom,
+                u.prenom,
+                u.passwordHash,
+                u.role_id,
+                r.name AS role_name
+            FROM User u
+            JOIN Role r ON u.role_id = r.id
+            WHERE u.email = ?
+        ");
+
         $sql->execute([$email]);
         $user = $sql->fetch(PDO::FETCH_ASSOC);
 
@@ -23,10 +35,17 @@ if (isset($_POST['Sign_in'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['name'] = $user['nom'];
+            $_SESSION['role'] = $user['role_name'];
 
-            header("Location: dashboard.php");
+            if ($user['role_name'] === 'ADMIN') {
+                header("Location: ../admin/dashboard.php");
+            } elseif ($user['role_name'] === 'DOCTOR') {
+                header("Location: ../doctor/dashboard.php");
+            } else {
+                header("Location: ../patient/dashboard.php");
+            }
+
             exit();
-
         } else {
             $message = "Invalid email or password";
         }
