@@ -57,7 +57,7 @@ if (isset($_POST['register'])) {
 
     <div class="bg-white shadow-xl p-8 rounded-3xl w-full max-w-lg">
 
-        <h2 class="text-3xl font-black text-center">
+        <h2 class="text-3xl font-black text-center text-blue-600">
             Create Account
         </h2>
         <form method="POST" class="space-y-4 mt-8">

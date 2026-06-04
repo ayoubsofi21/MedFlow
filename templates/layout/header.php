@@ -3,14 +3,19 @@
         <div class="flex justify-between h-16 items-center">
 
             <!-- Logo -->
-            <div class="flex items-center gap-2">
+         <div class="flex items-center gap-2">
+            <a href="/MedFlow/public/home.php" class="flex items-center gap-2">
+                
                 <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm shadow-indigo-200">
                     M
                 </div>
+
                 <span class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
                     MedFlow
                 </span>
-            </div>
+
+            </a>
+        </div>
 
             <!-- Links -->
             <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
