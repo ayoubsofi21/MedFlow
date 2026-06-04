@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . "/adminRepositories.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -156,11 +158,16 @@ session_start();
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Spécialité Médicale</label>
-                                    <select class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                                    <select class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors required">
                                         <option value="">Sélectionner une spécialité...</option>
-                                        <option value="1">Cardiologue</option>
-                                        <option value="2">Généraliste</option>
-                                        <option value="3">Pédiatre</option>
+
+                                        <?php if (!empty($specialities)): ?>
+                                            <?php foreach ($specialities as $speciality): ?>
+                                                <option value="<?php echo htmlspecialchars($speciality->id); ?>">
+                                                    <?php echo htmlspecialchars($speciality->libelle); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </select>
                                 </div>
                                 <div>
@@ -198,46 +205,58 @@ session_start();
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
-                                <tr class="hover:bg-slate-50/50 transition-colors">
-                                    <td class="py-4 px-6">
-                                        <div class="font-semibold text-slate-900">Dr. Amina Benjelloun</div>
-                                        <div class="text-xs text-slate-400">a.benjelloun@clinic.ma</div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-                                            Cardiologue
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Actif
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right space-x-3">
-                                        <button onclick="openEditModal('Dr. Amina Benjelloun', '1', 'a.benjelloun@clinic.ma')" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs">Modifier</button>
-                                        <button class="text-rose-600 hover:text-rose-900 font-medium text-xs">Désactiver</button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50/50 transition-colors">
-                                    <td class="py-4 px-6">
-                                        <div class="font-semibold text-slate-900">Dr. Karim Tazi</div>
-                                        <div class="text-xs text-slate-400">k.tazi@clinic.ma</div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">
-                                            Généraliste
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
-                                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Actif
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right space-x-3">
-                                        <button onclick="openEditModal('Dr. Karim Tazi', '2', 'k.tazi@clinic.ma')" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs">Modifier</button>
-                                        <button class="text-rose-600 hover:text-rose-900 font-medium text-xs">Désactiver</button>
-                                    </td>
-                                </tr>
+                                    <?php 
+                                    $medecins = [] ; // doctors array
+
+                                    if (!empty($medecins)): 
+                                        foreach ($medecins as $medecin): 
+                                            $doctorName = "Dr. " . $medecin->prenom . " " . $medecin->nom;
+                                    ?>
+                                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                                <td class="py-4 px-6">
+                                                    <div class="font-semibold text-slate-900"><?php echo htmlspecialchars($doctorName); ?></div>
+                                                    <div class="text-xs text-slate-400"><?php echo htmlspecialchars($medecin->email); ?></div>
+                                                </td>
+
+                                                <td class="py-4 px-6">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                                        <?php echo htmlspecialchars($medecin->specialite); ?>
+                                                    </span>
+                                                </td>
+
+                                                <td class="py-4 px-6">
+                                                    <?php if ($medecin->actif): ?>
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                                                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Actif
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                                                            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span> Inactif
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                    
+                                                <td class="py-4 px-6 text-right space-x-3">
+                                                    <button onclick="openEditModal('<?php echo addslashes(htmlspecialchars($doctorName)); ?>', '<?php echo htmlspecialchars($medecin->specialite_id); ?>', '<?php echo htmlspecialchars($medecin->email); ?>')" 
+                                                            class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs">
+                                                        Modifier
+                                                    </button>
+                                                    
+                                                    <button class="<?php echo $medecin->actif ? 'text-rose-600 hover:text-rose-900' : 'text-emerald-600 hover:text-emerald-900'; ?> font-medium text-xs">
+                                                        <?php echo $medecin->actif ? 'Désactiver' : 'Activer'; ?>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php 
+                                        endforeach; 
+                                    else: 
+                                    ?>
+                                        <tr>
+                                            <td colspan="4" class="py-8 text-center text-sm text-slate-400 italic">
+                                                Aucun médecin trouvé.
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -249,15 +268,25 @@ session_start();
                         <p class="text-xs text-slate-500">Filtres de recherche patients.</p>
                     </div>
                     <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-                        <form class="flex flex-col gap-2">
+                        <form action="scripts/speciality_process.php" method="POST" class="flex flex-col gap-2">
                             <div class="flex gap-2">
-                                <input type="text" placeholder="Nouvelle spécialité..." class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl font-medium text-sm transition-colors">Ajouter</button>
+                                <input type="text" 
+                                       name="libelle" 
+                                       placeholder="Nouvelle spécialité..." 
+                                       required
+                                       class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl font-medium text-sm transition-colors">
+                                    Ajouter
+                                </button>
                             </div>
-                            
+
                             <?php if (isset($_SESSION['error'])): ?>
                                 <p class="text-xs text-rose-600 font-medium pl-1 mt-1">
-                                    <?php echo htmlspecialchars($_SESSION['error']); ?>
+                                    <?php 
+                                    echo htmlspecialchars($_SESSION['error']); 
+                                    unset($_SESSION['error']);
+                                    ?>
                                 </p>
                             <?php endif; ?>
                         </form>

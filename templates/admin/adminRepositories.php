@@ -55,15 +55,16 @@ function countFinishedCons(){
 function getAllMedecins() {
     try {
         $conn = DB::connect();
-        $sql = "SELECT u.id, u.nom, u.prenom, u.email,m.numeroRPPS, m.actif, s.libelle AS specialite
+        $sql = "SELECT u.id AS user_id, u.nom, u.prenom, u.email, m.numeroRPPS, m.actif, m.specialite_id, s.libelle AS specialite
                 FROM Medecin m
                 JOIN User u       ON u.id = m.user_id
-                JOIN Specialite s ON s.id = m.specialite_id ";
+                JOIN Specialite s ON s.id = m.specialite_id";
         $stmt = $conn->query($sql);
-        $res =  $stmt->fetchAll(PDO::FETCH_OBJ);
+        $res = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $res;
-    }catch(PDOException $e){
+    } catch(PDOException $e) {
         echo "error : " . $e->getMessage();
+        return [];
     }
 }
 
@@ -118,4 +119,34 @@ function addSpecialit(string $libelle) : bool {
     } catch (Exception $e) {
         return false;
     }
+}
+
+function getWorkingSpecialities() {
+    $conn = DB::connect();
+    $sql = "Select s.libelle , COUNT(m.user_id) FROM  Specialite s
+            INNER JOIN Medecin m ON m.specialite_id = s.id 
+            GROUP BY s.id,s.libelle";
+    
+    try {
+        $stmt = $conn->query($sql);
+        $res =  $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $res;
+
+    }catch(PDOException $e){
+        echo "error : " . $e->getMessage();
+    }
+}
+
+function getAllSpecialities(){
+    $conn = DB::connect();
+    $sql = "Select id , libelle FROM  Specialite";
+    try {
+        $stmt = $conn->query($sql);
+        $res =  $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $res;
+
+    }catch(PDOException $e){
+        echo "error : " . $e->getMessage();
+    }
+
 }
