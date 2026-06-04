@@ -2,6 +2,17 @@
 session_start();
 require_once __DIR__ . "/adminRepositories.php";
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+if ($_SESSION['role'] !== 'ADMIN') {
+    session_destroy();
+    header("Location: ../login.php?error=access_denied");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -58,8 +69,8 @@ require_once __DIR__ . "/adminRepositories.php";
                     AD
                 </div>
                 <div class="flex-1 overflow-hidden">
-                    <h4 class="text-sm font-semibold text-slate-900 truncate">Anas Admin</h4>
-                    <p class="text-xs text-slate-500 truncate">admin@clinic.ma</p>
+                    <h4 class="text-sm font-semibold text-slate-900 truncate"><?php echo $_SESSION['name'] ; ?></h4>
+                    <p class="text-xs text-slate-500 truncate"><?php echo $_SESSION['email'] ; ?></p>
                 </div>
             </div>
         </div>
