@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../src/Controller/PatientController.php';
 $controller = new PatientController();
 $doctors = $controller->searchDoctors();
 
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="fr">
