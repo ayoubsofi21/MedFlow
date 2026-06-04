@@ -3,13 +3,13 @@ session_start();
 require_once __DIR__ . "/adminRepositories.php";
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../../public/home.php");
     exit();
 }
 
 if ($_SESSION['role'] !== 'ADMIN') {
     session_destroy();
-    header("Location: ../login.php?error=access_denied");
+    header("Location: ../../public/home.php");
     exit();
 }
 
