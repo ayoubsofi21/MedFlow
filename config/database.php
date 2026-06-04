@@ -1,10 +1,16 @@
 <?php
-try {
 
-$conn = new pdo("mysql:host=localhost;dbname=gestion_rendezvous_medical", "root", "");
-// echo "connected with successfully";
-}catch(PDOException $e){
-     echo("Connection failed: " . $e->getMessage());
+class Database
+{
+    public static function connect()
+    {
+        return new PDO(
+            "mysql:host=localhost;dbname=gestion_rendezvous_medical;charset=utf8",
+            "root",
+            "",
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]
+        );
+    }
 }
-
-?>

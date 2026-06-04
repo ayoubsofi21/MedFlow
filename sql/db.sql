@@ -1,5 +1,5 @@
--- Active: 1780475627858@@127.0.0.1@3306
 -- Create Database
+DROP DATABASE gestion_rendezvous_medical;
 CREATE DATABASE gestion_rendezvous_medical;
 USE gestion_rendezvous_medical;
 
@@ -31,40 +31,33 @@ CREATE TABLE User (
 -- =========================
 CREATE TABLE Specialite (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    libelle VARCHAR(100) NOT NULL UNIQUE
-);
-
--- =========================
--- PATIENT
--- =========================
-CREATE TABLE Patient (
-    user_id INT PRIMARY KEY,
-    dateNaissance DATE NOT NULL,
-    telephone VARCHAR(20) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES User(id)
-        ON DELETE CASCADE
+    libelle VARCHAR(100) NOT NULL
 );
 
 -- =========================
 -- MEDECIN
 -- =========================
 CREATE TABLE Medecin (
-    user_id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    specialite_id INT NOT NULL,
     numeroRPPS VARCHAR(50) NOT NULL UNIQUE,
     actif BOOLEAN DEFAULT TRUE,
-    specialite_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES User(id)
-        ON DELETE CASCADE,
+
+    FOREIGN KEY (user_id) REFERENCES User(id),
     FOREIGN KEY (specialite_id) REFERENCES Specialite(id)
 );
 
 -- =========================
--- ADMINISTRATEUR
+-- PATIENT
 -- =========================
-CREATE TABLE Administrateur (
-    user_id INT PRIMARY KEY,
+CREATE TABLE Patient (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    dateNaissance DATE NOT NULL,
+    telephone VARCHAR(20),
+
     FOREIGN KEY (user_id) REFERENCES User(id)
-        ON DELETE CASCADE
 );
 
 -- =========================
@@ -72,18 +65,22 @@ CREATE TABLE Administrateur (
 -- =========================
 CREATE TABLE Creneau (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    medecin_id INT NOT NULL,
     dateHeureDebut DATETIME NOT NULL,
     dateHeureFin DATETIME NOT NULL,
     disponible BOOLEAN DEFAULT TRUE,
-    medecin_id INT NOT NULL,
-    FOREIGN KEY (medecin_id) REFERENCES Medecin(user_id)
+
+    FOREIGN KEY (medecin_id) REFERENCES Medecin(id)
 );
 
 -- =========================
--- RENDEZVOUS
+-- RENDEZ-VOUS
 -- =========================
 CREATE TABLE RendezVous (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    creneau_id INT NOT NULL UNIQUE,
+
     date_heure DATETIME NOT NULL,
     statut ENUM(
         'EN_ATTENTE',
@@ -91,13 +88,10 @@ CREATE TABLE RendezVous (
         'ANNULE',
         'TERMINE'
     ) DEFAULT 'EN_ATTENTE',
-    motif TEXT,
-    patient_id INT NOT NULL,
-    medecin_id INT NOT NULL,
-    creneau_id INT UNIQUE NOT NULL,
 
-    FOREIGN KEY (patient_id) REFERENCES Patient(user_id),
-    FOREIGN KEY (medecin_id) REFERENCES Medecin(user_id),
+    motif TEXT,
+
+    FOREIGN KEY (patient_id) REFERENCES Patient(id),
     FOREIGN KEY (creneau_id) REFERENCES Creneau(id)
 );
 
@@ -106,100 +100,74 @@ CREATE TABLE RendezVous (
 -- =========================
 CREATE TABLE Ordonnance (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    rendezvous_id INT UNIQUE,
+
     contenuTexte TEXT NOT NULL,
     creeLe DATETIME DEFAULT CURRENT_TIMESTAMP,
     accesSecurise BOOLEAN DEFAULT TRUE,
-    rendezvous_id INT UNIQUE NOT NULL,
 
-    FOREIGN KEY (rendezvous_id) REFERENCES RendezVous(id)
+    FOREIGN KEY (rendezvous_id)
+        REFERENCES RendezVous(id)
+        ON DELETE CASCADE
 );
+-- =========================
+-- INSERT DATA - ROLE
+-- =========================
+INSERT INTO Role (name) VALUES 
+('ADMIN'),
+('MEDECIN'),
+('PATIENT');
 
+-- =========================
+-- INSERT DATA - USER
+-- =========================
+INSERT INTO User (email, passwordHash, nom, prenom, role_id) VALUES
+('admin@medflow.com', 'hash_admin_123', 'Benali', 'Youssef', 1),
+('dr.sofi@medflow.com', 'hash_doc_456', 'Sofi', 'Ayoub', 2),
+('dr.elalami@medflow.com', 'hash_doc_789', 'El Alami', 'Sara', 2),
+('patient1@gmail.com', 'hash_pat_111', 'Amrani', 'Omar', 3),
+('patient2@gmail.com', 'hash_pat_222', 'Zahir', 'Salma', 3);
 
-
-INSERT INTO Specialite (libelle)
-VALUES
+-- =========================
+-- INSERT DATA - SPECIALITE
+-- =========================
+INSERT INTO Specialite (libelle) VALUES
 ('Cardiologie'),
 ('Dermatologie'),
-('Pediatrie'),
-('Ophtalmologie'),
-('Gynecologie');
-INSERT INTO Role (name) VALUES ('ADMIN');
-INSERT INTO Role (name) VALUES ('DOCTOR');
-INSERT INTO Role (name) VALUES ('PATIENT');
-INSERT INTO Role (name) VALUES ('SECRETARY');
-INSERT INTO User(email,passwordHash,nom,prenom,role_id)
-VALUES
-('admin@gmail.com','123456','Admin','System',1),
+('Pédiatrie'),
+('Médecine Générale');
 
-('medecin1@gmail.com','123456','Alaoui','Mohamed',2),
-('medecin2@gmail.com','123456','Bennani','Youssef',2),
+-- =========================
+-- INSERT DATA - MEDECIN
+-- =========================
+INSERT INTO Medecin (user_id, specialite_id, numeroRPPS, actif) VALUES
+(2, 1, 'RPPS-10001', TRUE),
+(3, 2, 'RPPS-10002', TRUE);
 
-('patient1@gmail.com','123456','Karimi','Sara',3),
-('patient2@gmail.com','123456','El Idrissi','Omar',3);
-INSERT INTO Administrateur(user_id)
-VALUES (1);
-INSERT INTO Medecin(user_id,numeroRPPS,actif,specialite_id)
-VALUES
-(2,'RPPS10001',TRUE,1),
-(3,'RPPS10002',TRUE,2);
-INSERT INTO Patient(user_id,dateNaissance,telephone)
-VALUES
-(4,'1998-05-10','0612345678'),
-(5,'2001-08-20','0677777777');
-INSERT INTO Creneau(
-dateHeureDebut,
-dateHeureFin,
-disponible,
-medecin_id
-)
-VALUES
-('2026-06-01 09:00:00',
- '2026-06-01 09:30:00',
- TRUE,
- 2),
+-- =========================
+-- INSERT DATA - PATIENT
+-- =========================
+INSERT INTO Patient (user_id, dateNaissance, telephone) VALUES
+(4, '1998-05-12', '0612345678'),
+(5, '2001-09-22', '0678912345');
 
-('2026-06-01 10:00:00',
- '2026-06-01 10:30:00',
- TRUE,
- 2),
+-- =========================
+-- INSERT DATA - CRENEAU
+-- =========================
+INSERT INTO Creneau (medecin_id, dateHeureDebut, dateHeureFin, disponible) VALUES
+(1, '2026-06-04 09:00:00', '2026-06-04 09:30:00', FALSE),
+(1, '2026-06-04 09:30:00', '2026-06-04 10:00:00', TRUE),
+(2, '2026-06-04 10:00:00', '2026-06-04 10:30:00', TRUE);
 
-('2026-06-01 11:00:00',
- '2026-06-01 11:30:00',
- TRUE,
- 3);
- INSERT INTO RendezVous(
-date_heure,
-statut,
-motif,
-patient_id,
-medecin_id,
-creneau_id
-)
-VALUES
-(
-'2026-06-01 09:00:00',
-'CONFIRME',
-'Consultation generale',
-4,
-2,
-1
-),
-(
-'2026-06-01 11:00:00',
-'EN_ATTENTE',
-'Controle dermatologique',
-5,
-3,
-3
-);
-INSERT INTO Ordonnance(
-contenuTexte,
-accesSecurise,
-rendezvous_id
-)
-VALUES
-(
-'Paracetamol 500mg - 3 fois par jour pendant 5 jours',
-TRUE,
-1
-);
+-- =========================
+-- INSERT DATA - RENDEZVOUS
+-- =========================
+INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif) VALUES
+(1, 1, '2026-06-04 09:00:00', 'CONFIRME', 'Consultation cardiaque'),
+(2, 3, '2026-06-04 10:00:00', 'EN_ATTENTE', 'Douleurs dermatologiques');
+
+-- =========================
+-- INSERT DATA - ORDONNANCE
+-- =========================
+INSERT INTO Ordonnance (rendezvous_id, contenuTexte, accesSecurise) VALUES
+(1, 'Paracétamol 1g - 3 fois par jour pendant 5 jours', TRUE);
