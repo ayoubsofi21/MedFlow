@@ -84,7 +84,10 @@ require_once __DIR__ . "/../../src/Middleware/AuthMiddleware.php";
                 <span class="text-sm text-slate-500 font-medium"><?php echo todayDatemr() ?></span>
                 <div class="w-px h-5 bg-slate-200"></div>
                 <button class="text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1.5">
-                    Déconnexion
+                     <a href="/MedFlow/public/auth/logout.php"
+                    class="text-sm font-medium text-rose-600 hover:text-rose-700">
+                    Logout
+                    </a>
                 </button>
             </div>
         </header>
