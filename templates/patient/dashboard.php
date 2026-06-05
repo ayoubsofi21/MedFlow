@@ -1,53 +1,100 @@
+<!DOCTYPE html>
+<html>
 <head>
-    <title>patient dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+    <title>Patient Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900">Mon Espace Santé</h1>
-        <p class="text-sm text-slate-500">Suivi de vos consultations</p>
-    </div>
 
-    <div class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
-        <div class="p-5 border-b border-slate-100">
-            <h3 class="font-bold text-slate-900">Historique des rendez-vous</h3>
-        </div>
-        <div class="divide-y divide-slate-100">
-            <div class="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="text-center p-2.5 bg-amber-50 text-amber-700 rounded-xl min-w-[70px]">
-                        <span class="block text-xs font-bold uppercase">Juin</span>
-                        <span class="block text-xl font-extrabold">03</span>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-slate-900">Dr. Jean Dupont</p>
-                        <p class="text-sm text-slate-500">Consultation à 14:30</p>
-                    </div>
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <h2>Espace Patient</h2>
+
+    <div class="card p-3 mb-3">
+
+        <h5> Rechercher un médecin</h5>
+
+        <form method="GET" action="index.php?action=search">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <input type="text" name="name" class="form-control" placeholder="Nom médecin">
                 </div>
-                <div>
-                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-200">En attente de validation</span>
+
+                <div class="col-md-4">
+                    <select name="specialty" class="form-control">
+                        <option value="">-- Choisir spécialité --</option>
+
+                        <?php if (!empty($specialites)): ?>
+                            <?php foreach ($specialites as $s): ?>
+                                <option value="<?= $s['id'] ?>">
+                                    <?= htmlspecialchars($s['libelle']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                    </select>
                 </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100">Search</button>
+                </div>
+
             </div>
 
-            <div class="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="text-center p-2.5 bg-emerald-50 text-emerald-700 rounded-xl min-w-[70px]">
-                        <span class="block text-xs font-bold uppercase">Mai</span>
-                        <span class="block text-xl font-extrabold">20</span>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-slate-900">Dr. Claire Robert</p>
-                        <p class="text-sm text-slate-500">Généraliste • Consulté à 10:00</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4 w-full sm:w-auto justify-between sm:justify-end">
-                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Terminé</span>
-                    <a href="/patient/prescription/download?id=45" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700">
-                        <i class="fa-solid fa-file-arrow-down mr-1.5"></i> Ordonnance
-                    </a>
-                </div>
-            </div>
-        </div>
+        </form>
+
     </div>
+
+    <div class="card p-3">
+
+        <h5> Mes rendez-vous</h5>
+
+        <?php if (!empty($appointments)): ?>
+
+        <table class="table table-bordered">
+            <tr>
+                <th>Docteur</th>
+                <th>Début créneau</th>
+                <th>Fin créneau</th>
+                <th>Date RDV</th>
+                <th>Motif</th>
+                <th>Statut</th>
+            </tr>
+
+            <?php foreach ($appointments as $a): ?>
+                <tr>
+                    <td>
+                        Dr <?= htmlspecialchars($a['doctor_nom'] . ' ' . $a['doctor_prenom']) ?>
+                    </td>
+
+                    <td><?= $a['dateHeureDebut'] ?></td>
+                    <td><?= $a['dateHeureFin'] ?></td>
+
+                    <td><?= $a['date_heure'] ?></td>
+                    <td><?= $a['motif'] ?></td>
+                    <td><?= $a['statut'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+
+        <?php else: ?>
+
+        <div class="alert alert-warning">
+            Aucun rendez-vous trouvé
+        </div>
+
+        <?php endif; ?>
+
+        
+
+
+    </div>
+
 </div>
+
+</body>
+</html>

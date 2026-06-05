@@ -12,31 +12,33 @@ class DoctorRepository
     }
 
     public function searchDoctors($name = '', $speciality = '')
-{
-    $sql = "SELECT 
-                u.id,
-                u.nom,
-                u.prenom,
-                s.libelle AS speciality
-            FROM Medecin m
-            JOIN User u ON m.user_id = u.id
-            JOIN Specialite s ON m.specialite_id = s.id
-            WHERE 1=1";
+    {
+        $sql = "SELECT 
+                    u.id,
+                    u.nom,
+                    u.prenom,
+                    s.id AS speciality_id,
+                    s.libelle AS speciality
+                FROM Medecin m
+                JOIN User u ON m.user_id = u.id
+                JOIN Specialite s ON m.specialite_id = s.id
+                WHERE 1=1";
 
-    $params = [];
+        $params = [];
 
-    if (!empty($name)) {
-        $sql .= " AND (u.nom LIKE :name OR u.prenom LIKE :name)";
-        $params[':name'] = "%$name%";
+        if (!empty($name)) {
+            $sql .= " AND (u.nom LIKE :name OR u.prenom LIKE :name)";
+            $params[':name'] = "%$name%";
+        }
+
+        if (!empty($speciality)) {
+            $sql .= " AND s.id = :speciality";
+            $params[':speciality'] = $speciality;
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    if (!empty($speciality)) {
-        $sql .= " AND s.libelle LIKE :speciality";
-        $params[':speciality'] = "%$speciality%";
-    }
-
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($params);
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}}
+}
