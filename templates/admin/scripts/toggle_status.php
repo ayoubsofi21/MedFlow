@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../adminRepositories.php';  
+require_once __DIR__ . '//../../../src/Repository/adminRepositories.php.php';  
 $id_medecin = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id_medecin > 0) {
     $liste_medecins = getAllMedecins();

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . "/adminRepositories.php";
+require_once __DIR__ . "/../../src/Repository/adminRepositories.php";
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../public/home.php");

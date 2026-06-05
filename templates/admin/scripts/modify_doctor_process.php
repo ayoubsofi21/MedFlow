@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../adminRepositories.php';
+require_once '/../../../src/Repository/adminRepositories.php.php';
 if (isset($_POST['user_id'])) {
     $user_id       = $_POST['user_id'];
     $nom           = trim($_POST['nom']);
