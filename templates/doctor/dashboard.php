@@ -1,4 +1,10 @@
 <?php
+
+
+require_once "../../src/Middleware/AuthMiddleware.php";
+
+AuthMiddleware::checkLogin();
+AuthMiddleware::checkRole('DOCTOR');
 session_start();
 // Simulation de données pour la démo
 $appointments = [
@@ -67,7 +73,10 @@ $appointments = [
             <h2 class="text-xl font-bold text-slate-800">Gestion des consultations</h2>
             <div class="flex items-center gap-4">
                 <span class="text-sm text-slate-500 font-medium">Mardi, 2 Juin 2026</span>
-                <button class="text-sm font-medium text-rose-600 hover:text-rose-700">Déconnexion</button>
+               <a href="/MedFlow/public/auth/logout.php"
+                class="text-sm font-medium text-rose-600 hover:text-rose-700">
+                Logout
+                </a>
             </div>
         </header>
 

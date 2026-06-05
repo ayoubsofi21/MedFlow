@@ -58,6 +58,7 @@ class AuthController {
     public function logout() {
         session_start();
         session_destroy();
-        header("Location: /login.php");
+        header("Location: /MedFlow/templates/auth/login.php");
+        exit();
     }
 }
