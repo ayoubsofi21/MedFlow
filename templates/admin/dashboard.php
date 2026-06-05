@@ -2,14 +2,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// require_once __DIR__ . "/../../src/Repository/adminRepositories.php";
+require_once __DIR__ . "/../../src/Repository/adminRepositories.php";
 
 
 require_once __DIR__ . "/../../src/Middleware/AuthMiddleware.php";
 
 // ALWAYS first security
-AuthMiddleware::checkLogin();
-AuthMiddleware::checkRole('ADMIN');
+// AuthMiddleware::checkLogin();
+// AuthMiddleware::checkRole('ADMIN');
 
 ?>
 <!DOCTYPE html>

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/conn/db.php";
+require_once __DIR__ . "/../../templates/admin/conn/db.php";
 
 function getTotalRDVs() {
     try {
