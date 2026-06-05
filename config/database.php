@@ -1,16 +1,19 @@
 <?php
 
-class Database
-{
-    public static function connect()
-    {
-        return new PDO(
-            "mysql:host=localhost;dbname=gestion_rendezvous_medical;charset=utf8",
-            "root",
-            "",
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]
-        );
-    }
+$host = "localhost";
+$dbname = "gestion_rendezvous_medical";
+$username = "root";
+$password = "";
+
+try {
+    $conn = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8",
+        $username,
+        $password
+    );
+
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+} catch (PDOException $e) {
+    die("DB Connection failed: " . $e->getMessage());
 }

@@ -1,12 +1,14 @@
 <?php
+    class AuthMiddleware {
 
-class AuthMiddleware {
-
-    public static function checkLogin() {
-
+    private static function ensureSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+    }
+
+    public static function checkLogin() {
+        self::ensureSession();
 
         if (!isset($_SESSION['user_id'])) {
             header("Location: /MedFlow/templates/auth/login.php");
@@ -15,10 +17,7 @@ class AuthMiddleware {
     }
 
     public static function checkRole($role) {
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::ensureSession();
 
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== $role) {
             header("Location: /MedFlow/templates/auth/login.php");
@@ -26,3 +25,4 @@ class AuthMiddleware {
         }
     }
 }
+?>
