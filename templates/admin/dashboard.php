@@ -83,7 +83,7 @@ if ($_SESSION['role'] !== 'ADMIN') {
                 <h2 class="text-xl font-bold text-slate-800">Tableau de bord général</h2>
             </div>
             <div class="flex items-center gap-4">
-                <span class="text-sm text-slate-500 font-medium">Mardi, 2 Juin 2026</span>
+                <span class="text-sm text-slate-500 font-medium"><?php echo todayDatemr() ?></span>
                 <div class="w-px h-5 bg-slate-200"></div>
                 <button class="text-sm font-medium text-rose-600 hover:text-rose-700 flex items-center gap-1.5">
                     Déconnexion
@@ -122,7 +122,7 @@ if ($_SESSION['role'] !== 'ADMIN') {
                     <div>
                         <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">Médecins Actifs</span>
                         <h3 class="text-3xl font-bold text-slate-900 mt-1"><?php echo getTotalDrsActifs()['total'] ; ?></h3>
-                        <p class="text-xs text-slate-400 font-medium mt-1.5">Sur 3 spécialités</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1.5">Sur <?php echo empty(getWorkingSpecialities()) ? 0 : count(getWorkingSpecialities()) ; ?> spécialités</p>
                     </div>
                     <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">

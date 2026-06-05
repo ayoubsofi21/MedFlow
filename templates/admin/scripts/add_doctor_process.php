@@ -23,6 +23,6 @@ if (isset($_POST['nom'])) {
     exit();
 
 } else {
-    header("Location: ../index.php");
+    header("Location: ../dashboard.php");
     exit();
 }

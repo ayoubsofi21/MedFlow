@@ -19,7 +19,5 @@ if ($id_medecin > 0) {
 } else {
     $_SESSION['error'] = "Identifiant du médecin introuvable.";
 }
-
-// 5. Retour automatique au tableau de bord
 header("Location: " . $_SERVER['HTTP_REFERER']);
 exit();

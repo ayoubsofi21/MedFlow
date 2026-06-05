@@ -201,3 +201,38 @@ function updateMed($user_id, $nom, $prenom, $email, $numeroRPPS, $specialite_id)
         return false;
     }
 }
+
+function todayDatemr(string $timezone = 'Africa/Casablanca'){
+   $jours = [
+        'Sunday'    => 'Dimanche',
+        'Monday'    => 'Lundi',
+        'Tuesday'   => 'Mardi',
+        'Wednesday' => 'Mercredi',
+        'Thursday'  => 'Jeudi',
+        'Friday'    => 'Vendredi',
+        'Saturday'  => 'Samedi'
+    ];
+
+    $mois = [
+        'January'   => 'Janvier',
+        'February'  => 'Février',
+        'March'     => 'Mars',
+        'April'     => 'Avril',
+        'May'       => 'Mai',
+        'June'      => 'Juin',
+        'July'      => 'Juillet',
+        'August'    => 'Août',
+        'September' => 'Septembre',
+        'October'   => 'Octobre',
+        'November'  => 'Novembre',
+        'December'  => 'Décembre'
+    ];
+    $jourAnglais = date('l'); 
+    $jourNumero  = date('j');
+    $moisAnglais = date('F');
+    $annee       = date('Y');
+    $jourFrancais = $jours[$jourAnglais];
+    $moisFrancais = $mois[$moisAnglais];
+
+    return "{$jourFrancais}, {$jourNumero} {$moisFrancais} {$annee}";
+}

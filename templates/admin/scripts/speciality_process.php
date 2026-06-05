@@ -38,6 +38,6 @@ if (isset($_POST['libelle'])) {
     exit();
 
 } else {
-    // header("Location: ../index.php"); still don't know the path to fix
+    header("Location: ../dashboard.php");
     exit();
 }

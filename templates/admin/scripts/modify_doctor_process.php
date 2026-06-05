@@ -22,6 +22,6 @@ if (isset($_POST['user_id'])) {
     exit();
 
 } else {
-    header("Location: ../index.php");
+    header("Location: ../dashboard.php");
     exit();
 }
