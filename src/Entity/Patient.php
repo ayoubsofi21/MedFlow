@@ -1,8 +1,7 @@
-<?php
-
-class Patient
-{
+<?php 
+class Patient {
     public int $id;
-    public string $name;
-    public string $email;
+    public int $user_id;
+    public string $telephone;
+    public string $dateNaissance;
 }
