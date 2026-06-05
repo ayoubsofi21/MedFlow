@@ -12,12 +12,16 @@ switch ($action) {
         $controller->search();
         break;
 
+    case 'creneaux':
+        $controller->creneaux();
+        break;
+
     case 'book':
         $controller->book();
         break;
 
     case 'ordonnance':
-        $controller->ordonnance();
+        $controller->ordonnance(); // <--- Hna fin kan l-mouchkil (zdna l-'a')
         break;
 
     default:

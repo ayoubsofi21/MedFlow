@@ -14,7 +14,7 @@ class DoctorRepository
     public function searchDoctors($name = '', $speciality = '')
     {
         $sql = "SELECT 
-                    u.id,
+                    m.id,
                     u.nom,
                     u.prenom,
                     s.id AS speciality_id,
@@ -22,23 +22,24 @@ class DoctorRepository
                 FROM Medecin m
                 JOIN User u ON m.user_id = u.id
                 JOIN Specialite s ON m.specialite_id = s.id
-                WHERE 1=1";
+                WHERE m.actif = 1";
 
         $params = [];
 
         if (!empty($name)) {
-            $sql .= " AND (u.nom LIKE :name OR u.prenom LIKE :name)";
-            $params[':name'] = "%$name%";
+            $sql .= " AND (u.nom LIKE ? OR u.prenom LIKE ?)";
+            $params[] = "%$name%";
+            $params[] = "%$name%";
         }
 
         if (!empty($speciality)) {
-            $sql .= " AND s.id = :speciality";
-            $params[':speciality'] = $speciality;
+            $sql .= " AND s.id = ?";
+            $params[] = $speciality;
         }
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

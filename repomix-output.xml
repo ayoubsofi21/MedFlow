@@ -1,0 +1,1379 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+config/database.php
+config/security.php
+docs/class-diagram.png
+docs/erd.png
+docs/useCase.png
+public/css/files.php
+public/index.php
+public/js/files.php
+README.md
+sql/db.sql
+src/Controller/PatientController.php
+src/Entity/Appointment.php
+src/Entity/Patient.php
+src/Enum/AppointmentStatus.php
+src/Middleware/files.php
+src/Repository/AppointmentRepository.php
+src/Repository/DoctorRepository.php
+templates/admin/dashboard.php
+templates/auth/files.php
+templates/doctor/agenda.php
+templates/layout/footer.php
+templates/layout/header.php
+templates/patient/creneaux.php
+templates/patient/dashboard.php
+templates/patient/ordonnence.php
+templates/patient/search.php
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="config/security.php">
+
+</file>
+
+<file path="public/css/files.php">
+
+</file>
+
+<file path="public/js/files.php">
+
+</file>
+
+<file path="src/Middleware/files.php">
+
+</file>
+
+<file path="templates/auth/files.php">
+
+</file>
+
+<file path="templates/layout/footer.php">
+</main>
+    
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
+            &copy; 2026 MedFlow. Projet académique [2023] Développeur web et web mobile.
+        </div>
+    </footer>
+</body>
+</html>
+</file>
+
+<file path="templates/layout/header.php">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedFlow - Gestion de Clinique Médicale</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-heart-pulse text-blue-600 text-2xl"></i>
+                    <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">MedFlow</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="/patient/search" class="text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">Rechercher un médecin</a>
+                    <a href="/patient/dashboard" class="text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">Mon Tableau de Bord</a>
+                    
+                    <span class="h-6 w-px bg-slate-200"></span>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm tracking-wide">
+                            PT
+                        </div>
+                        <a href="/auth/logout" class="text-slate-400 hover:text-red-600 p-2 text-sm transition" title="Déconnexion">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+</file>
+
+<file path="templates/patient/creneaux.php">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Creneaux</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-4">
+
+<h2>Creneaux disponibles</h2>
+
+<table class="table table-bordered">
+
+<tr>
+    <th>Heure début</th>
+    <th>Heure fin</th>
+    <th>Action</th>
+</tr>
+
+<?php foreach ($creneaux as $c): ?>
+
+<tr>
+    <td><?= $c['dateHeureDebut'] ?></td>
+    <td><?= $c['dateHeureFin'] ?></td>
+    <td>
+        <a href="index.php?action=book&creneau_id=<?= $c['id'] ?>" class="btn btn-success">
+            Réserver
+        </a>
+    </td>
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+</body>
+</html>
+</file>
+
+<file path="templates/patient/ordonnence.php">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ordonnance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-4">
+
+<h2> Ordonnance</h2>
+
+<?php if ($ord): ?>
+
+<div class="alert alert-info">
+    <?= $ord['contenuTexte'] ?>
+</div>
+
+<?php else: ?>
+
+<div class="alert alert-warning">
+    Aucune ordonnance
+</div>
+
+<?php endif; ?>
+
+</body>
+</html>
+</file>
+
+<file path="config/database.php">
+<?php
+
+class Database
+{
+    public static function connect()
+    {
+        return new PDO(
+            "mysql:host=localhost;dbname=gestion_rendezvous_medical;charset=utf8",
+            "root",
+            "",
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]
+        );
+    }
+}
+</file>
+
+<file path="README.md">
+# MedFlow
+
+# 🏥 MedFlow – Application de Gestion de Clinique Médicale
+
+## 📌 Description du Projet
+
+**MedFlow** est une plateforme web simplifiée de gestion de clinique médicale inspirée de Doctolib.
+
+L’objectif principal est :
+
+- Optimiser la prise de rendez-vous
+- Fluidifier la gestion des plannings des médecins
+- Offrir un suivi clair du cycle de vie des consultations
+- Sécuriser l’accès via un système **RBAC (Role-Based Access Control)**
+
+Chaque utilisateur possède un rôle unique qui détermine ses permissions dans l’application.
+
+---
+
+# 🚀 Fonctionnalités
+
+## 👤 Espace Patient
+
+### 🔍 Recherche Médecin
+
+Le patient peut :
+
+- Rechercher un médecin par nom
+- Filtrer par spécialité
+- Consulter les créneaux disponibles
+
+### 📅 Réservation de Rendez-vous
+
+Le patient connecté peut :
+
+- Réserver un créneau libre
+- Planifier une consultation
+
+**Règles :**
+
+- Statut initial : `EN_ATTENTE`
+- Le créneau devient indisponible après réservation
+
+### 📋 Tableau de Bord Patient
+
+Le patient peut :
+
+- Consulter ses rendez-vous passés
+- Voir ses rendez-vous futurs
+- Télécharger ses ordonnances
+
+---
+
+## 👨‍⚕️ Espace Médecin
+
+### 📆 Gestion du Planning
+
+Le médecin peut :
+
+- Visualiser son agenda
+- Consulter les rendez-vous de la semaine
+- Distinguer les statuts via des couleurs
+
+### ✅ Validation / ❌ Annulation
+
+Le médecin peut :
+
+- Valider un rendez-vous
+  → `CONFIRME`
+
+- Annuler un rendez-vous
+  → `ANNULE`
+
+Lors d’une annulation :
+
+- Le créneau est immédiatement libéré
+
+### 🩺 Consultation & Ordonnance
+
+Pendant une consultation :
+
+- Passage du rendez-vous à `TERMINE`
+- Rédaction d’une ordonnance textuelle
+- Archivage sécurisé du dossier patient
+
+---
+
+## 🛠️ Espace Administration
+
+### 👨‍⚕️ Gestion des Médecins
+
+L’administrateur peut :
+
+- Créer un médecin
+- Modifier un compte
+- Désactiver un compte
+
+Chaque médecin doit être associé à une spécialité.
+
+### 🏥 Gestion des Spécialités
+
+L’administrateur peut :
+
+- Ajouter
+- Modifier
+- Supprimer les spécialités médicales
+
+### 📊 Dashboard & Statistiques
+
+L’administrateur peut consulter :
+
+- Taux d’annulation
+- Nombre de rendez-vous terminés
+- Activité globale de la clinique
+
+---
+
+# 🔐 Sécurité & RBAC
+
+L’application repose sur un système :
+
+**RBAC – Role Based Access Control**
+
+### Rôles disponibles
+
+- ADMIN
+- DOCTOR
+- PATIENT
+
+L’accès aux routes est protégé via :
+
+- Middleware
+- Vérification des permissions
+- Contrôle des rôles
+
+---
+
+# 🔄 Cycle de Vie du Rendez-vous
+
+Le rendez-vous suit un cycle strict :
+
+```text
+EN_ATTENTE
+    ↓
+CONFIRME
+    ↓
+TERMINE
+
+ou
+
+EN_ATTENTE
+    ↓
+ANNULE
+```
+
+Le typage strict empêche les transitions invalides.
+
+Exemple :
+
+❌ Un rendez-vous annulé ne peut pas devenir terminé.
+
+---
+
+# 🧱 Architecture du Projet
+
+```bash
+medflow/
+├── config/
+│   ├── database.php
+│   └── security.php
+│
+├── public/
+│   ├── css/
+│   ├── js/
+│   └── index.php
+│
+├── src/
+│   ├── Controller/
+│   ├── Entity/
+│   ├── Enum/
+│   ├── Middleware/
+│   └── Repository/
+│
+├── templates/
+│   ├── admin/
+│   ├── doctor/
+│   ├── patient/
+│   ├── auth/
+│   └── layout/
+│
+├── .env
+└── README.md
+```
+
+---
+
+# 🗃️ Modélisation UML
+
+## Use Case Diagram
+
+Ajouter ici le diagramme de cas d’utilisation.
+
+```md
+![UseCase](docs/useCase.png)
+```
+
+---
+
+## Class Diagram
+
+Ajouter ici le diagramme de classe.
+
+```md
+![ClassDiagram](docs/class-diagram.png)
+```
+
+---
+
+## ERD – Entity Relationship Diagram
+
+Ajouter ici l’ERD.
+
+```md
+![ERD](docs/erd.png)
+```
+
+---
+
+# ⚙️ Technologies Utilisées
+
+### Backend
+
+- PHP 8
+- PDO
+- MySQL
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- Tailwind CSS / Bootstrap
+
+### Outils
+
+- Git & GitHub
+- Jira
+- Canva
+- PlantUML
+
+---
+
+# 📅 Organisation du Projet
+
+## Gestion des tâches
+
+JIRA :
+
+```text
+Ajouter le lien JIRA ici
+```
+
+## Repository GitHub
+
+```text
+Ajouter le lien GitHub ici
+```
+
+---
+
+# 👥 Travail en Groupe
+
+Projet réalisé en équipe.
+
+Répartition des tâches :
+
+- Analyse & UML
+- Backend
+- Frontend
+- Base de données
+- Documentation
+
+---
+
+# 🎯 Critères de Performance
+
+### Architecture & Modélisation
+
+✔ Gestion des rôles
+✔ Middleware sécurisé
+✔ Architecture claire
+
+### Typage Strict
+
+✔ Gestion contrôlée du cycle de vie des rendez-vous
+✔ États sécurisés
+
+### Qualité du Code
+
+✔ Commits clairs
+✔ Structure MVC
+✔ Documentation README
+
+---
+
+# 🧪 Installation
+
+## 1. Cloner le projet
+
+```bash
+git clone <repo-url>
+```
+
+## 2. Configurer .env
+
+Ajouter :
+
+```env
+DB_HOST=
+DB_NAME=
+DB_USER=
+DB_PASS=
+```
+
+## 3. Lancer le serveur
+
+```bash
+php -S localhost:8000 -t public
+```
+
+---
+
+# 📚 Référentiel
+
+**Développeur Web et Web Mobile – 2023**
+
+---
+
+# 👨‍💻 Auteur / Équipe
+
+Projet réalisé dans le cadre du brief :
+
+**MedFlow – Application de Gestion de Clinique Médicale**
+</file>
+
+<file path="sql/db.sql">
+-- Create Database
+DROP DATABASE gestion_rendezvous_medical;
+CREATE DATABASE gestion_rendezvous_medical;
+USE gestion_rendezvous_medical;
+
+-- =========================
+-- ROLE
+-- =========================
+CREATE TABLE Role (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- =========================
+-- USER
+-- =========================
+CREATE TABLE User (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    passwordHash VARCHAR(255) NOT NULL,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    role_id INT NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES Role(id)
+);
+
+-- =========================
+-- SPECIALITE
+-- =========================
+CREATE TABLE Specialite (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL
+);
+
+-- =========================
+-- MEDECIN
+-- =========================
+CREATE TABLE Medecin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    specialite_id INT NOT NULL,
+    numeroRPPS VARCHAR(50) NOT NULL UNIQUE,
+    actif BOOLEAN DEFAULT TRUE,
+
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (specialite_id) REFERENCES Specialite(id)
+);
+
+-- =========================
+-- PATIENT
+-- =========================
+CREATE TABLE Patient (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    dateNaissance DATE NOT NULL,
+    telephone VARCHAR(20),
+
+    FOREIGN KEY (user_id) REFERENCES User(id)
+);
+
+-- =========================
+-- CRENEAU
+-- =========================
+CREATE TABLE Creneau (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    medecin_id INT NOT NULL,
+    dateHeureDebut DATETIME NOT NULL,
+    dateHeureFin DATETIME NOT NULL,
+    disponible BOOLEAN DEFAULT TRUE,
+
+    FOREIGN KEY (medecin_id) REFERENCES Medecin(id)
+);
+
+-- =========================
+-- RENDEZ-VOUS
+-- =========================
+CREATE TABLE RendezVous (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    creneau_id INT NOT NULL UNIQUE,
+
+    date_heure DATETIME NOT NULL,
+    statut ENUM(
+        'EN_ATTENTE',
+        'CONFIRME',
+        'ANNULE',
+        'TERMINE'
+    ) DEFAULT 'EN_ATTENTE',
+
+    motif TEXT,
+
+    FOREIGN KEY (patient_id) REFERENCES Patient(id),
+    FOREIGN KEY (creneau_id) REFERENCES Creneau(id)
+);
+
+-- =========================
+-- ORDONNANCE
+-- =========================
+CREATE TABLE Ordonnance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rendezvous_id INT UNIQUE,
+
+    contenuTexte TEXT NOT NULL,
+    creeLe DATETIME DEFAULT CURRENT_TIMESTAMP,
+    accesSecurise BOOLEAN DEFAULT TRUE,
+
+    FOREIGN KEY (rendezvous_id)
+        REFERENCES RendezVous(id)
+        ON DELETE CASCADE
+);
+-- =========================
+-- INSERT DATA - ROLE
+-- =========================
+INSERT INTO Role (name) VALUES 
+('ADMIN'),
+('MEDECIN'),
+('PATIENT');
+
+-- =========================
+-- INSERT DATA - USER
+-- =========================
+INSERT INTO User (email, passwordHash, nom, prenom, role_id) VALUES
+('admin@medflow.com', 'hash_admin_123', 'Benali', 'Youssef', 1),
+('dr.sofi@medflow.com', 'hash_doc_456', 'Sofi', 'Ayoub', 2),
+('dr.elalami@medflow.com', 'hash_doc_789', 'El Alami', 'Sara', 2),
+('patient1@gmail.com', 'hash_pat_111', 'Amrani', 'Omar', 3),
+('patient2@gmail.com', 'hash_pat_222', 'Zahir', 'Salma', 3);
+
+-- =========================
+-- INSERT DATA - SPECIALITE
+-- =========================
+INSERT INTO Specialite (libelle) VALUES
+('Cardiologie'),
+('Dermatologie'),
+('Pédiatrie'),
+('Médecine Générale');
+
+-- =========================
+-- INSERT DATA - MEDECIN
+-- =========================
+INSERT INTO Medecin (user_id, specialite_id, numeroRPPS, actif) VALUES
+(2, 1, 'RPPS-10001', TRUE),
+(3, 2, 'RPPS-10002', TRUE);
+
+-- =========================
+-- INSERT DATA - PATIENT
+-- =========================
+INSERT INTO Patient (user_id, dateNaissance, telephone) VALUES
+(4, '1998-05-12', '0612345678'),
+(5, '2001-09-22', '0678912345');
+
+-- =========================
+-- INSERT DATA - CRENEAU
+-- =========================
+INSERT INTO Creneau (medecin_id, dateHeureDebut, dateHeureFin, disponible) VALUES
+(1, '2026-06-04 09:00:00', '2026-06-04 09:30:00', FALSE),
+(1, '2026-06-04 09:30:00', '2026-06-04 10:00:00', TRUE),
+(2, '2026-06-04 10:00:00', '2026-06-04 10:30:00', TRUE);
+
+-- =========================
+-- INSERT DATA - RENDEZVOUS
+-- =========================
+INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif) VALUES
+(1, 1, '2026-06-04 09:00:00', 'CONFIRME', 'Consultation cardiaque'),
+(2, 3, '2026-06-04 10:00:00', 'EN_ATTENTE', 'Douleurs dermatologiques');
+
+-- =========================
+-- INSERT DATA - ORDONNANCE
+-- =========================
+INSERT INTO Ordonnance (rendezvous_id, contenuTexte, accesSecurise) VALUES
+(1, 'Paracétamol 1g - 3 fois par jour pendant 5 jours', TRUE);
+</file>
+
+<file path="src/Entity/Appointment.php">
+<?php
+
+class Appointment
+{
+    public int $id;
+    public int $patient_id;
+    public int $doctor_id;
+    public string $date;
+    public string $status;
+}
+</file>
+
+<file path="src/Entity/Patient.php">
+<?php
+
+class Patient
+{
+    public int $id;
+    public string $name;
+    public string $email;
+}
+</file>
+
+<file path="src/Enum/AppointmentStatus.php">
+<?php
+
+class AppointmentStatus
+{
+    const EN_ATTENTE = "EN_ATTENTE";
+    const CONFIRME = "CONFIRME";
+    const ANNULE = "ANNULE";
+    const TERMINE = "TERMINE";
+}
+</file>
+
+<file path="src/Repository/AppointmentRepository.php">
+<?php
+
+require_once __DIR__ . '/../../config/database.php';
+
+class AppointmentRepository
+{
+    private PDO $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = Database::connect();
+    }
+
+    public function cancel($id)
+    {
+        $sql = "UPDATE RendezVous SET statut = 'ANNULE' WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$id]);
+    }
+    public function getByPatient($patientId): array
+{
+    $pdo = Database::connect();
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            r.id,
+            r.date_heure,
+            r.motif,
+            r.statut,
+            u.nom AS doctor_nom,
+            u.prenom AS doctor_prenom,
+            c.dateHeureDebut,
+            c.dateHeureFin
+        FROM RendezVous r
+        JOIN Creneau c ON r.creneau_id = c.id
+        JOIN Medecin m ON c.medecin_id = m.id
+        JOIN User u ON m.user_id = u.id
+        WHERE r.patient_id = ?
+        ORDER BY r.date_heure DESC
+    ");
+
+    $stmt->execute([$patientId]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
+public function create($patientId, $creneauId, $motif)
+{
+    $pdo = Database::connect();
+
+    $pdo->beginTransaction();
+
+    $stmt = $pdo->prepare("
+        INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif)
+        VALUES (?, ?, NOW(), 'EN_ATTENTE', ?)
+    ");
+
+    $stmt->execute([$patientId, $creneauId, $motif]);
+
+    $stmt2 = $pdo->prepare("
+        UPDATE Creneau SET disponible = 0 WHERE id = ?
+    ");
+
+    $stmt2->execute([$creneauId]);
+
+    $pdo->commit();
+}
+public function searchDoctors($name, $specialty)
+{
+    $pdo = Database::connect();
+
+    $sql = "
+        SELECT 
+            m.id,
+            u.nom,
+            u.prenom,
+            s.libelle AS specialite
+        FROM Medecin m
+        JOIN User u ON m.user_id = u.id
+        JOIN Specialite s ON m.specialite_id = s.id
+        WHERE 1=1
+    ";
+
+    $params = [];
+
+    if (!empty($name)) {
+        $sql .= " AND (u.nom LIKE ? OR u.prenom LIKE ?)";
+        $params[] = "%$name%";
+        $params[] = "%$name%";
+    }
+
+    if (!empty($specialty)) {
+        $sql .= " AND m.specialite_id = ?";
+        $params[] = $specialty;
+    }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
+}
+</file>
+
+<file path="templates/admin/dashboard.php">
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</html>
+<div class="space-y-8">
+    <div class="border-b border-slate-200 pb-4">
+        <h1 class="text-2xl font-bold text-slate-900">Administration MedFlow</h1>
+        <p class="text-sm text-slate-500">Indicateurs de performance et gestion du référentiel d'accès (RBAC).</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 flex items-center space-x-4 shadow-2xs">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-file-invoice"></i>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">RDV Terminés / Médecin</p>
+                <p class="text-2xl font-black text-slate-900 mt-0.5">84.6 %</p>
+            </div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 flex items-center space-x-4 shadow-2xs">
+            <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Taux global d'annulation</p>
+                <p class="text-2xl font-black text-slate-900 mt-0.5">3.8 %</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 flex items-center space-x-4 shadow-2xs">
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Comptes praticiens actifs</p>
+                <p class="text-2xl font-black text-slate-900 mt-0.5">18</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs h-fit">
+            <h3 class="text-base font-bold text-slate-900 mb-4 border-b border-slate-100 pb-2">
+                <i class="fa-solid fa-user-plus mr-2 text-blue-600"></i>Ajouter un Praticien
+            </h3>
+            
+            <form action="/admin/doctor/create" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nom Complet</label>
+                    <input type="text" name="name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Adresse Email</label>
+                    <input type="email" name="email" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Spécialité Médicale</label>
+                    <select name="specialty_id" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                        <option value="">Sélectionner un domaine</option>
+                        <option value="1">Cardiologue</option>
+                        <option value="2">Généraliste</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm py-2.5 rounded-xl transition shadow-xs cursor-pointer">
+                    Créer le compte médecin
+                </button>
+            </form>
+        </div>
+
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+            <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Équipe Médicale Enregistrée</h3>
+                <a href="/admin/specialties" class="text-xs text-blue-600 hover:underline font-medium">Gérer les spécialités <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+            
+            <div class="divide-y divide-slate-100">
+                <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <p class="font-bold text-slate-900 text-sm">Dr. Jean Dupont</p>
+                        <p class="text-xs text-slate-500">Spécialité : <span class="text-blue-600 font-medium">Cardiologue</span> &bull; jp@medflow.org</p>
+                    </div>
+                    
+                    <form action="/admin/doctor/toggle" method="POST">
+                        <input type="hidden" name="doctor_id" value="1">
+                        <button type="submit" class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition cursor-pointer">
+                            <i class="fa-solid fa-circle-check mr-1"></i>Compte Actif
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</file>
+
+<file path="templates/doctor/agenda.php">
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</html>
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900">Planning de Consultations</h1>
+            <p class="text-sm text-slate-500">Vue globale de vos dossiers médicaux</p>
+        </div>
+        <div class="flex items-center space-x-2 bg-white px-3 py-1.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600">
+            <i class="fa-solid fa-calendar-days text-blue-600"></i>
+            <span>Semaine en cours</span>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-600 text-xs font-bold uppercase border-b border-slate-200">
+                        <th class="p-4">Horaire</th>
+                        <th class="p-4">Patient</th>
+                        <th class="p-4">Statut actuel</th>
+                        <th class="p-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                    <tr>
+                        <td class="p-4 font-semibold text-slate-900">Lun 01/06 — 11:30</td>
+                        <td class="p-4">Alice Martin</td>
+                        <td class="p-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span>En attente
+                            </span>
+                        </td>
+                        <td class="p-4 text-right space-x-1">
+                            <form action="/doctor/appointment/validate" method="POST" class="inline-block">
+                                <input type="hidden" name="appointment_id" value="501">
+                                <button type="submit" class="px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white rounded-md border border-emerald-200 transition cursor-pointer">Valider</button>
+                            </form>
+                            <form action="/doctor/appointment/cancel" method="POST" class="inline-block">
+                                <input type="hidden" name="appointment_id" value="501">
+                                <button type="submit" class="px-2.5 py-1 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-600 hover:text-white rounded-md border border-red-200 transition cursor-pointer">Annuler</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="p-4 font-semibold text-slate-900">Lun 01/06 — 14:00</td>
+                        <td class="p-4">Marc Tournier</td>
+                        <td class="p-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-1.5"></span>Confirmé
+                            </span>
+                        </td>
+                        <td class="p-4 text-right">
+                            <button type="button" onclick="openConsultationModal('502', 'Marc Tournier')" class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition cursor-pointer">
+                                <i class="fa-solid fa-notes-medical mr-1.5"></i>Lancer la Consultation
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="prescription-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-slate-900">Clôture de consultation : <span id="modal-patient-name" class="text-blue-600"></span></h3>
+            <button type="button" onclick="closeConsultationModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        
+        <form action="/doctor/appointment/complete" method="POST" class="space-y-4">
+            <input type="hidden" id="modal-appointment-id" name="appointment_id" value="">
+            
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Rédiger l'ordonnance médicale (Format textuel)</label>
+                <textarea name="prescription_text" rows="6" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-mono text-sm" placeholder="Ex: — Paracétamol 1000mg : 1 comprimé toutes les 6 heures si douleur.&#10;— Repos strict pendant 3 jours."></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-2">
+                <button type="button" onclick="closeConsultationModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer">Fermer</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition cursor-pointer">Passer à Statut::TERMINE</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openConsultationModal(id, patientName) {
+        document.getElementById('modal-appointment-id').value = id;
+        document.getElementById('modal-patient-name').innerText = patientName;
+        document.getElementById('prescription-modal').classList.remove('hidden');
+    }
+    function closeConsultationModal() {
+        document.getElementById('prescription-modal').classList.add('hidden');
+    }
+</script>
+</file>
+
+<file path="templates/patient/dashboard.php">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <h2>Espace Patient</h2>
+
+    <div class="card p-3 mb-3">
+
+        <h5> Rechercher un médecin</h5>
+
+        <form method="GET" action="index.php?action=search">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <input type="text" name="name" class="form-control" placeholder="Nom médecin">
+                </div>
+
+                <div class="col-md-4">
+                    <select name="specialty" class="form-control">
+                        <option value="">-- Choisir spécialité --</option>
+
+                        <?php if (!empty($specialites)): ?>
+                            <?php foreach ($specialites as $s): ?>
+                                <option value="<?= $s['id'] ?>">
+                                    <?= htmlspecialchars($s['libelle']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100">Search</button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="card p-3">
+
+        <h5> Mes rendez-vous</h5>
+
+        <?php if (!empty($appointments)): ?>
+
+        <table class="table table-bordered">
+            <tr>
+                <th>Docteur</th>
+                <th>Début créneau</th>
+                <th>Fin créneau</th>
+                <th>Date RDV</th>
+                <th>Motif</th>
+                <th>Statut</th>
+            </tr>
+
+            <?php foreach ($appointments as $a): ?>
+                <tr>
+                    <td>
+                        Dr <?= htmlspecialchars($a['doctor_nom'] . ' ' . $a['doctor_prenom']) ?>
+                    </td>
+
+                    <td><?= $a['dateHeureDebut'] ?></td>
+                    <td><?= $a['dateHeureFin'] ?></td>
+
+                    <td><?= $a['date_heure'] ?></td>
+                    <td><?= $a['motif'] ?></td>
+                    <td><?= $a['statut'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+
+        <?php else: ?>
+
+        <div class="alert alert-warning">
+            Aucun rendez-vous trouvé
+        </div>
+
+        <?php endif; ?>
+
+        
+
+
+    </div>
+
+</div>
+
+</body>
+</html>
+</file>
+
+<file path="public/index.php">
+<?php
+
+require_once __DIR__ . '/../src/Controller/PatientController.php';
+
+$controller = new PatientController();
+
+$action = $_GET['action'] ?? 'dashboard';
+
+switch ($action) {
+
+    case 'search':
+        $controller->search();
+        break;
+
+    case 'book':
+        $controller->book();
+        break;
+
+    case 'ordonnance':
+        $controller->ordonnance();
+        break;
+
+    default:
+        $controller->dashboard(1);
+        break;
+}
+</file>
+
+<file path="src/Controller/PatientController.php">
+<?php
+
+require_once __DIR__ . '/../Repository/AppointmentRepository.php';
+require_once __DIR__ . '/../Repository/DoctorRepository.php';
+require_once __DIR__ . '/../../config/database.php';
+class PatientController
+{
+    private AppointmentRepository $appointmentRepo;
+    private DoctorRepository $doctorRepo;
+    private SpecialiteRepository $specialiteRepo;
+
+    public function __construct()
+    {
+        $this->appointmentRepo = new AppointmentRepository();
+        $this->doctorRepo = new DoctorRepository();
+        $this->specialiteRepo = new SpecialiteRepository();
+    }
+
+   
+    public function dashboard($patientId)
+    {
+        $appointments = $this->appointmentRepo->getByPatient($patientId) ?? [];
+        $specialites = $this->specialiteRepo->getAll() ?? [];
+
+        require __DIR__ . '/../../templates/patient/dashboard.php';
+    }
+
+  
+    public function search()
+    {
+        $name = $_GET['name'] ?? '';
+        $specialty = $_GET['specialty'] ?? '';
+
+        $doctors = $this->doctorRepo->searchDoctors($name, $specialty) ?? [];
+
+        require __DIR__ . '/../../templates/patient/search.php';
+    }
+
+  
+    public function book()
+    {
+        $patientId = 1; 
+        $creneauId = $_GET['creneau_id'] ?? null;
+
+        if ($creneauId) {
+            $this->appointmentRepo->create($patientId, $creneauId, 'Consultation');
+        }
+
+        header("Location: index.php?action=dashboard");
+        exit;
+    }
+}
+</file>
+
+<file path="src/Repository/DoctorRepository.php">
+<?php
+
+require_once __DIR__ . '/../../config/database.php';
+
+class DoctorRepository
+{
+    private PDO $db;
+
+    public function __construct()
+    {
+        $this->db = Database::connect();
+    }
+
+    public function searchDoctors($name = '', $speciality = '')
+    {
+        $sql = "SELECT 
+                    u.id,
+                    u.nom,
+                    u.prenom,
+                    s.id AS speciality_id,
+                    s.libelle AS speciality
+                FROM Medecin m
+                JOIN User u ON m.user_id = u.id
+                JOIN Specialite s ON m.specialite_id = s.id
+                WHERE 1=1";
+
+        $params = [];
+
+        if (!empty($name)) {
+            $sql .= " AND (u.nom LIKE :name OR u.prenom LIKE :name)";
+            $params[':name'] = "%$name%";
+        }
+
+        if (!empty($speciality)) {
+            $sql .= " AND s.id = :speciality";
+            $params[':speciality'] = $speciality;
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+</file>
+
+<file path="templates/patient/search.php">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-4">
+
+<h2> Doctors Results</h2>
+
+<?php if (!empty($doctors)): ?>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Name</th>
+        <th>Speciality</th>
+    </tr>
+
+    <?php foreach ($doctors as $d): ?>
+        <tr>
+            <td><?= $d['nom'] . ' ' . $d['prenom'] ?></td>
+            <td><?= $d['speciality'] ?></td>
+        </tr>
+    <?php endforeach; ?>
+
+</table>
+
+<?php else: ?>
+
+<div class="alert alert-warning">
+    No doctors found 
+</div>
+
+<?php endif; ?>
+
+
+
+</body>
+</html>
+</file>
+
+</files>

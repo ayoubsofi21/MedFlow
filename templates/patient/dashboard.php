@@ -15,10 +15,10 @@
 
         <h5> Rechercher un médecin</h5>
 
-        <form method="GET" action="index.php?action=search">
-
+        <form method="GET" action="index.php">
+            <input type="hidden" name="action" value="search">
+            
             <div class="row">
-
                 <div class="col-md-4">
                     <input type="text" name="name" class="form-control" placeholder="Nom médecin">
                 </div>
@@ -26,7 +26,6 @@
                 <div class="col-md-4">
                     <select name="specialty" class="form-control">
                         <option value="">-- Choisir spécialité --</option>
-
                         <?php if (!empty($specialites)): ?>
                             <?php foreach ($specialites as $s): ?>
                                 <option value="<?= $s['id'] ?>">
@@ -34,16 +33,13 @@
                                 </option>
                             <?php endforeach; ?>
                         <?php endif; ?>
-
                     </select>
                 </div>
 
                 <div class="col-md-4">
-                    <button class="btn btn-primary w-100">Search</button>
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
                 </div>
-
             </div>
-
         </form>
 
     </div>
@@ -62,7 +58,7 @@
                 <th>Date RDV</th>
                 <th>Motif</th>
                 <th>Statut</th>
-            </tr>
+                <th>Action</th> </tr>
 
             <?php foreach ($appointments as $a): ?>
                 <tr>
@@ -75,7 +71,16 @@
 
                     <td><?= $a['date_heure'] ?></td>
                     <td><?= $a['motif'] ?></td>
-                    <td><?= $a['statut'] ?></td>
+                    <td>
+                        <span class="badge bg-<?= $a['statut'] == 'EN_ATTENTE' ? 'warning text-dark' : 'success' ?>">
+                            <?= $a['statut'] ?>
+                        </span>
+                    </td>
+                    <td>
+                        <a href="index.php?action=ordonnance&id=<?= $a['id'] ?>" class="btn btn-sm btn-info text-white">
+                            Voir Ordonnance
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
 
@@ -88,9 +93,6 @@
         </div>
 
         <?php endif; ?>
-
-        
-
 
     </div>
 

@@ -47,22 +47,34 @@ public function create($patientId, $creneauId, $motif)
 {
     $pdo = Database::connect();
 
-    $pdo->beginTransaction();
+    try {
+        // Kan-bdaaw transaction
+        $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("
-        INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif)
-        VALUES (?, ?, NOW(), 'EN_ATTENTE', ?)
-    ");
+        $stmt = $pdo->prepare("
+            INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif)
+            VALUES (?, ?, NOW(), 'EN_ATTENTE', ?)
+        ");
 
-    $stmt->execute([$patientId, $creneauId, $motif]);
+        $stmt->execute([$patientId, $creneauId, $motif]);
 
-    $stmt2 = $pdo->prepare("
-        UPDATE Creneau SET disponible = 0 WHERE id = ?
-    ");
+        $stmt2 = $pdo->prepare("
+            UPDATE Creneau SET disponible = 0 WHERE id = ?
+        ");
 
-    $stmt2->execute([$creneauId]);
+        $stmt2->execute([$creneauId]);
 
-    $pdo->commit();
+        // Ila kolchi daz mzyan, kan-sauvegardiw
+        $pdo->commit();
+        return true;
+
+    } catch (PDOException $e) {
+        // Ila w9e3 chi mouchkil (bhal l-créneau déjà réservé), kan-trawj3ou lor
+        $pdo->rollBack();
+        
+        // Hna n9drou n-retourniw false wla n-gériw l-erreur bla may-crachi l-site
+        return false;
+    }
 }
 public function searchDoctors($name, $specialty)
 {
