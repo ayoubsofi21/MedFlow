@@ -2,16 +2,16 @@
 session_start();
 require_once __DIR__ . "/../../src/Repository/adminRepositories.php";
 
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: ../../public/home.php");
-//     exit();
-// }
+ if (!isset($_SESSION['user_id'])) {
+    header("Location: ../../public/home.php");
+    exit();
+}
 
-// if ($_SESSION['role'] !== 'ADMIN') {
-//     session_destroy();
-//     header("Location: ../../public/home.php");
-//     exit();
-// }
+if ($_SESSION['role'] !== 'ADMIN') {
+    session_destroy();
+    header("Location: ../../public/home.php");
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
