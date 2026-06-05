@@ -1,4 +1,6 @@
-<?php
+
+
+   <?php
 
 class AuthController {
 
@@ -11,30 +13,33 @@ class AuthController {
     // 🔑 LOGIN
     public function login($email, $password) {
 
+        session_start(); 
+
         $user = $this->userRepository->findByEmail($email);
 
         if (!$user) {
-            return "User not found";
+            die("User not found");
         }
 
         if (!password_verify($password, $user['passwordHash'])) {
-            return "Wrong password";
+            header("Location: /MedFlow/templates/auth/login.php?error=1");
+            exit(); 
         }
-
-        session_start();
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['name'] = $user['nom'];
         $_SESSION['role'] = $user['role_name'];
 
-        // Redirect by role
+        // ✅ FIXED ROUTES
         if ($user['role_name'] === 'ADMIN') {
-            header("Location: /admin/dashboard.php");
+            header("Location: /MedFlow/templates/admin/dashboard.php");
+
         } elseif ($user['role_name'] === 'MEDECIN') {
-            header("Location: /doctor/dashboard.php");
+            header("Location: /MedFlow/templates/doctor/dashboard.php");
+
         } else {
-            header("Location: /patient/dashboard.php");
+            header("Location: /MedFlow/templates/patient/dashboard.php");
         }
 
         exit();
@@ -49,7 +54,8 @@ class AuthController {
             return "Email already exists";
         }
 
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        // ❌ FIX: match DB field passwordHash
+        $data['passwordHash'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
         return $this->userRepository->createPatient($data);
     }
@@ -58,7 +64,9 @@ class AuthController {
     public function logout() {
         session_start();
         session_destroy();
+
         header("Location: /MedFlow/templates/auth/login.php");
         exit();
     }
 }
+

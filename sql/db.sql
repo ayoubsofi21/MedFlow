@@ -3,10 +3,6 @@ DROP DATABASE gestion_rendezvous_medical;
 CREATE DATABASE gestion_rendezvous_medical;
 USE gestion_rendezvous_medical;
 
-DROP DATABASE  gestion_rendezvous_medical;
-
-DROP DATABASE  gestion_rendezvous_medical;
-
 -- =========================
 -- ROLE
 -- =========================
@@ -174,3 +170,4 @@ INSERT INTO RendezVous (patient_id, creneau_id, date_heure, statut, motif) VALUE
 -- =========================
 INSERT INTO Ordonnance (rendezvous_id, contenuTexte, accesSecurise) VALUES
 (1, 'Paracétamol 1g - 3 fois par jour pendant 5 jours', TRUE);
+SHOW COLUMNS FROM User;

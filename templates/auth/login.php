@@ -1,60 +1,7 @@
-<?php
-require __DIR__ . '/../layout/header.php';
-?>
-<?php
-session_start();
 
-require __DIR__ . '/../../config/database.php';
+<?php require __DIR__ . '/../layout/header.php'; ?>
 
-if (isset($_POST['Sign_in'])) {
 
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    if (!empty($email) && !empty($password)) {
-
-        $sql = $conn->prepare("
-            SELECT 
-                u.id,
-                u.email,
-                u.nom,
-                u.prenom,
-                u.passwordHash,
-                u.role_id,
-                r.name AS role_name
-            FROM User u
-            JOIN Role r ON u.role_id = r.id
-            WHERE u.email = ?
-        ");
-
-        $sql->execute([$email]);
-        $user = $sql->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['passwordHash'])) {
-
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['name'] = $user['nom'];
-            $_SESSION['role'] = $user['role_name'];
-
-            if ($user['role_name'] === 'ADMIN') {
-                header("Location: ../admin/dashboard.php");
-            } elseif ($user['role_name'] === 'DOCTOR') {
-                header("Location: ../doctor/dashboard.php");
-            } else {
-                header("Location: ../patient/dashboard.php");
-            }
-
-            exit();
-        } else {
-            $message = "Invalid email or password";
-        }
-
-    } else {
-        $message = "Please fill all fields";
-    }
-}
-?>
 <head>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -71,7 +18,7 @@ if (isset($_POST['Sign_in'])) {
             Welcome Back
         </p>
 
-        <form method="POST" class="mt-8 space-y-5">
+        <form method="POST"  action="/MedFlow/public/auth/login_process.php" class="mt-8 space-y-5">
 
             <?php if (!empty($message)) : ?>
                 <p class="text-red-500 text-center"><?= $message ?></p>

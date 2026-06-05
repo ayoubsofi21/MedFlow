@@ -60,7 +60,7 @@ if (isset($_POST['register'])) {
         <h2 class="text-3xl font-black text-center text-blue-600">
             Create Account
         </h2>
-        <form method="POST" class="space-y-4 mt-8">
+        <form method="POST"  action="/MedFlow/public/auth/register_process.php" class="space-y-4 mt-8">
 
             <?php if (!empty($message)) : ?>
                 <p class="text-red-500 text-center"><?= $message ?></p>

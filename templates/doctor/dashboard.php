@@ -1,11 +1,15 @@
+
 <?php
 
+require_once __DIR__ . "/../../src/Middleware/AuthMiddleware.php";
 
-require_once "../../src/Middleware/AuthMiddleware.php";
-
+// ALWAYS first security
 AuthMiddleware::checkLogin();
-AuthMiddleware::checkRole('DOCTOR');
-session_start();
+AuthMiddleware::checkRole('MEDECIN');
+
+// THEN load data (later from controller/repository)
+// require_once ...
+
 // Simulation de données pour la démo
 $appointments = [
     (object)['id' => 1, 'patient' => 'Sophie Martin', 'heure' => '09:00', 'statut' => 'EN_ATTENTE', 'motif' => 'Consultation Générale'],
